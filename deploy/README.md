@@ -89,7 +89,7 @@ Complete guide for deploying Tech Journal MVP to AWS using **EC2 Free Tier + Mon
 ssh -i your-key.pem ubuntu@<your-ec2-public-ip>
 
 # Download and run setup script
-curl -O https://raw.githubusercontent.com/YOUR_REPO/main/deploy/aws-setup.sh
+curl -O https://raw.githubusercontent.com/nvbinhsoft/tech-journal-december/main/deploy/aws-setup.sh
 chmod +x aws-setup.sh
 sudo ./aws-setup.sh
 
@@ -110,12 +110,8 @@ docker-compose --version
 # Navigate to application directory
 cd /opt/tech-journal
 
-# Clone repositories
-git clone https://github.com/YOUR_USERNAME/tech-journal-api.git
-git clone https://github.com/YOUR_USERNAME/tech-journal.git
-
-# Navigate to API directory
-cd tech-journal-api
+# Clone repository
+git clone https://github.com/nvbinhsoft/tech-journal-december.git .
 
 # Create production environment file
 cp .env.production.example .env.production
@@ -126,14 +122,11 @@ nano .env.production
 
 **Update `.env.production`** with your values:
 ```env
+# Production Config
 NODE_ENV=production
-PORT=3000
-API_PREFIX=v1
 MONGODB_URI=mongodb+srv://tech-journal-user:YOUR_PASSWORD@tech-journal-cluster.xxxxx.mongodb.net/tech-journal?retryWrites=true&w=majority
 JWT_SECRET=your-64-char-random-string
 JWT_EXPIRES_IN=86400
-ADMIN_EMAIL=admin@yourdomain.com
-ADMIN_PASSWORD=your-admin-password
 VITE_API_BASE_URL=http://YOUR_EC2_IP:3000/v1
 ```
 
@@ -147,10 +140,8 @@ openssl rand -base64 64
 ## Step 5: Build and Run
 
 ```bash
-# Load environment variables
-export $(cat .env.production | grep -v '^#' | xargs)
-
 # Build and start containers
+# Docker Compose will automatically load variables from .env.production
 docker-compose -f docker-compose.prod.yml up -d --build
 
 # Check status
@@ -233,39 +224,3 @@ docker-compose -f docker-compose.prod.yml logs frontend
 sudo lsof -i :80
 sudo lsof -i :3000
 ```
-
----
-
-## Security Recommendations (Post-MVP)
-
-1. **Restrict MongoDB Atlas access** to EC2 Elastic IP only
-2. **Add HTTPS** with Let's Encrypt (see below)
-3. **Use environment variables in AWS SSM** Parameter Store
-4. **Enable CloudWatch monitoring**
-
-### Adding HTTPS (Optional)
-
-```bash
-# Install certbot
-sudo apt-get install certbot python3-certbot-nginx
-
-# Get SSL certificate (replace with your domain)
-sudo certbot --nginx -d yourdomain.com
-
-# Auto-renewal test
-sudo certbot renew --dry-run
-```
-
----
-
-## Cost Summary
-
-| Resource | Free Tier Limit | Usage |
-|----------|----------------|-------|
-| EC2 t2.micro | 750 hrs/month | 24/7 = 720 hrs ✅ |
-| EBS Storage | 30 GB | 8 GB ✅ |
-| Data Transfer | 100 GB out/month | MVP << 100 GB ✅ |
-| Elastic IP | Free if attached | 1 attached ✅ |
-| MongoDB Atlas M0 | 512 MB forever | MVP << 512 MB ✅ |
-
-**Total: $0/month** within Free Tier
