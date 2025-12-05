@@ -1,0 +1,1147 @@
+openapi: 3.0.3
+info:
+  title: Engineering Chronicle Blog API
+  description: |
+    REST API specification for the Engineering Chronicle personal blog platform.
+    This API supports article management, tag management, settings configuration, and admin authentication.
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: http://localhost:3000/v1
+    description: Development server
+
+tags:
+  - name: Authentication
+    description: Admin authentication endpoints
+  - name: Articles
+    description: Article management endpoints
+  - name: Tags
+    description: Tag management endpoints
+  - name: Settings
+    description: Blog settings endpoints
+  - name: Public
+    description: Public endpoints (no auth required)
+
+paths:
+  # ============================================
+  # Authentication
+  # ============================================
+  /auth/login:
+    post:
+      tags:
+        - Authentication
+      summary: Admin login
+      description: Authenticate admin user and receive access token
+      operationId: login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Invalid credentials
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/logout:
+    post:
+      tags:
+        - Authentication
+      summary: Admin logout
+      description: Invalidate current session/token
+      operationId: logout
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/me:
+    get:
+      tags:
+        - Authentication
+      summary: Get current user
+      description: Get current authenticated user information
+      operationId: getCurrentUser
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: User information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ============================================
+  # Public Articles (No Auth Required)
+  # ============================================
+  /public/articles:
+    get:
+      tags:
+        - Public
+      summary: Get published articles
+      description: Retrieve all published articles for public viewing
+      operationId: getPublicArticles
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/TagFilter'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/SortBy'
+        - $ref: '#/components/parameters/SortOrder'
+      responses:
+        '200':
+          description: List of published articles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleListResponse'
+
+  /public/articles/{slug}:
+    get:
+      tags:
+        - Public
+      summary: Get article by slug
+      description: Retrieve a single published article by its slug
+      operationId: getPublicArticleBySlug
+      parameters:
+        - name: slug
+          in: path
+          required: true
+          description: Article slug
+          schema:
+            type: string
+            example: building-scalable-react-applications
+      responses:
+        '200':
+          description: Article details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /public/tags:
+    get:
+      tags:
+        - Public
+      summary: Get all tags
+      description: Retrieve all available tags
+      operationId: getPublicTags
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListResponse'
+
+  /public/settings:
+    get:
+      tags:
+        - Public
+      summary: Get blog settings
+      description: Retrieve public blog settings (title, description, author info)
+      operationId: getPublicSettings
+      responses:
+        '200':
+          description: Blog settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsResponse'
+
+  # ============================================
+  # Admin Articles (Auth Required)
+  # ============================================
+  /admin/articles:
+    get:
+      tags:
+        - Articles
+      summary: Get all articles (admin)
+      description: Retrieve all articles including drafts (admin only)
+      operationId: getAdminArticles
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/SearchQuery'
+        - $ref: '#/components/parameters/TagFilter'
+        - $ref: '#/components/parameters/PublishedFilter'
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - $ref: '#/components/parameters/SortBy'
+        - $ref: '#/components/parameters/SortOrder'
+      responses:
+        '200':
+          description: List of all articles
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Articles
+      summary: Create article
+      description: Create a new article
+      operationId: createArticle
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateArticleRequest'
+      responses:
+        '201':
+          description: Article created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /admin/articles/{id}:
+    get:
+      tags:
+        - Articles
+      summary: Get article by ID (admin)
+      description: Retrieve a single article by ID (including drafts)
+      operationId: getAdminArticleById
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ArticleId'
+      responses:
+        '200':
+          description: Article details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    put:
+      tags:
+        - Articles
+      summary: Update article
+      description: Update an existing article
+      operationId: updateArticle
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ArticleId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateArticleRequest'
+      responses:
+        '200':
+          description: Article updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Articles
+      summary: Delete article
+      description: Delete an article
+      operationId: deleteArticle
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/ArticleId'
+      responses:
+        '200':
+          description: Article deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ============================================
+  # Admin Tags (Auth Required)
+  # ============================================
+  /admin/tags:
+    get:
+      tags:
+        - Tags
+      summary: Get all tags (admin)
+      description: Retrieve all tags with usage count
+      operationId: getAdminTags
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagListResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    post:
+      tags:
+        - Tags
+      summary: Create tag
+      description: Create a new tag
+      operationId: createTag
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTagRequest'
+      responses:
+        '201':
+          description: Tag created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /admin/tags/{id}:
+    put:
+      tags:
+        - Tags
+      summary: Update tag
+      description: Update an existing tag
+      operationId: updateTag
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TagId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTagRequest'
+      responses:
+        '200':
+          description: Tag updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+    delete:
+      tags:
+        - Tags
+      summary: Delete tag
+      description: Delete a tag
+      operationId: deleteTag
+      security:
+        - bearerAuth: []
+      parameters:
+        - $ref: '#/components/parameters/TagId'
+      responses:
+        '200':
+          description: Tag deleted successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  # ============================================
+  # Admin Settings (Auth Required)
+  # ============================================
+  /admin/settings:
+    get:
+      tags:
+        - Settings
+      summary: Get settings (admin)
+      description: Retrieve all blog settings
+      operationId: getAdminSettings
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Blog settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+    put:
+      tags:
+        - Settings
+      summary: Update settings
+      description: Update blog settings
+      operationId: updateSettings
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSettingsRequest'
+      responses:
+        '200':
+          description: Settings updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  # ============================================
+  # File Upload (Auth Required)
+  # ============================================
+  /admin/upload:
+    post:
+      tags:
+        - Articles
+      summary: Upload image
+      description: Upload an image for use in articles
+      operationId: uploadImage
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+                  description: Image file (jpg, png, gif, webp)
+              required:
+                - file
+      responses:
+        '200':
+          description: Image uploaded successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UploadResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  # ============================================
+  # Security Schemes
+  # ============================================
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from login endpoint
+
+  # ============================================
+  # Parameters
+  # ============================================
+  parameters:
+    ArticleId:
+      name: id
+      in: path
+      required: true
+      description: Article unique identifier
+      schema:
+        type: string
+        format: uuid
+        example: "550e8400-e29b-41d4-a716-446655440000"
+
+    TagId:
+      name: id
+      in: path
+      required: true
+      description: Tag unique identifier
+      schema:
+        type: string
+        format: uuid
+        example: "550e8400-e29b-41d4-a716-446655440001"
+
+    SearchQuery:
+      name: search
+      in: query
+      description: Search query for title, excerpt, or content
+      schema:
+        type: string
+        example: "React"
+
+    TagFilter:
+      name: tags
+      in: query
+      description: Filter by tag IDs (comma-separated)
+      schema:
+        type: string
+        example: "tag-id-1,tag-id-2"
+
+    PublishedFilter:
+      name: published
+      in: query
+      description: Filter by published status
+      schema:
+        type: boolean
+        example: true
+
+    PageParam:
+      name: page
+      in: query
+      description: Page number for pagination
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+        example: 1
+
+    LimitParam:
+      name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 10
+        example: 10
+
+    SortBy:
+      name: sortBy
+      in: query
+      description: Field to sort by
+      schema:
+        type: string
+        enum: [createdAt, updatedAt, title]
+        default: createdAt
+        example: createdAt
+
+    SortOrder:
+      name: sortOrder
+      in: query
+      description: Sort order
+      schema:
+        type: string
+        enum: [asc, desc]
+        default: desc
+        example: desc
+
+  # ============================================
+  # Responses
+  # ============================================
+  responses:
+    Unauthorized:
+      description: Authentication required or invalid token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: "UNAUTHORIZED"
+              message: "Invalid or expired token"
+
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: "NOT_FOUND"
+              message: "Resource not found"
+
+    BadRequest:
+      description: Invalid request data
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            success: false
+            error:
+              code: "BAD_REQUEST"
+              message: "Validation failed"
+              details:
+                - field: "title"
+                  message: "Title is required"
+
+  # ============================================
+  # Schemas
+  # ============================================
+  schemas:
+    # ----- Common -----
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operation completed successfully"
+      required:
+        - success
+
+    ErrorResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: false
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "BAD_REQUEST"
+            message:
+              type: string
+              example: "Validation failed"
+            details:
+              type: array
+              items:
+                type: object
+                properties:
+                  field:
+                    type: string
+                  message:
+                    type: string
+      required:
+        - success
+        - error
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          example: 50
+        totalPages:
+          type: integer
+          example: 5
+
+    # ----- Auth -----
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          example: "admin@example.com"
+        password:
+          type: string
+          format: password
+          minLength: 8
+          example: "securePassword123"
+      required:
+        - email
+        - password
+
+    LoginResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            accessToken:
+              type: string
+              description: JWT access token
+              example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+            expiresIn:
+              type: integer
+              description: Token expiration time in seconds
+              example: 3600
+            user:
+              $ref: '#/components/schemas/User'
+      required:
+        - success
+        - data
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        email:
+          type: string
+          format: email
+          example: "admin@example.com"
+        role:
+          type: string
+          enum: [admin]
+          example: "admin"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+
+    UserResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/User'
+
+    # ----- Article -----
+    Article:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440000"
+        title:
+          type: string
+          maxLength: 200
+          example: "Building Scalable React Applications"
+        slug:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          example: "building-scalable-react-applications"
+        excerpt:
+          type: string
+          maxLength: 500
+          example: "Learn the architectural patterns and best practices..."
+        content:
+          type: string
+          description: Article content in HTML format (from rich text editor)
+          example: "<h1>Building Scalable React Applications</h1><p>Content here...</p>"
+        coverImage:
+          type: string
+          format: uri
+          nullable: true
+          example: "https://example.com/images/cover.jpg"
+        tags:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["tag-id-1", "tag-id-2"]
+        published:
+          type: boolean
+          example: true
+        readingTime:
+          type: integer
+          description: Estimated reading time in minutes
+          example: 5
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:00:00Z"
+      required:
+        - id
+        - title
+        - slug
+        - excerpt
+        - content
+        - tags
+        - published
+        - createdAt
+        - updatedAt
+
+    ArticleWithTags:
+      allOf:
+        - $ref: '#/components/schemas/Article'
+        - type: object
+          properties:
+            tagDetails:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tag'
+              description: Populated tag objects
+
+    CreateArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          example: "My New Article"
+        slug:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          example: "my-new-article"
+        excerpt:
+          type: string
+          maxLength: 500
+          example: "A brief description of the article..."
+        content:
+          type: string
+          description: Article content in HTML format
+          example: "<p>Article content here...</p>"
+        coverImage:
+          type: string
+          format: uri
+          nullable: true
+          example: "https://example.com/images/cover.jpg"
+        tags:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["tag-id-1"]
+        published:
+          type: boolean
+          default: false
+          example: false
+      required:
+        - title
+        - slug
+        - excerpt
+        - content
+        - tags
+
+    UpdateArticleRequest:
+      type: object
+      properties:
+        title:
+          type: string
+          maxLength: 200
+          example: "Updated Article Title"
+        slug:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          example: "updated-article-title"
+        excerpt:
+          type: string
+          maxLength: 500
+          example: "Updated description..."
+        content:
+          type: string
+          description: Article content in HTML format
+          example: "<p>Updated content...</p>"
+        coverImage:
+          type: string
+          format: uri
+          nullable: true
+          example: "https://example.com/images/new-cover.jpg"
+        tags:
+          type: array
+          items:
+            type: string
+            format: uuid
+          example: ["tag-id-1", "tag-id-2"]
+        published:
+          type: boolean
+          example: true
+
+    ArticleResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/ArticleWithTags'
+
+    ArticleListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleWithTags'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+
+    # ----- Tag -----
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "550e8400-e29b-41d4-a716-446655440001"
+        name:
+          type: string
+          maxLength: 50
+          example: "React"
+        slug:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          example: "react"
+        color:
+          type: string
+          pattern: "^#[0-9A-Fa-f]{6}$"
+          description: Hex color code
+          example: "#61DAFB"
+        articleCount:
+          type: integer
+          description: Number of articles with this tag
+          example: 5
+      required:
+        - id
+        - name
+        - slug
+        - color
+
+    CreateTagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          example: "GraphQL"
+        slug:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          example: "graphql"
+        color:
+          type: string
+          pattern: "^#[0-9A-Fa-f]{6}$"
+          example: "#E535AB"
+      required:
+        - name
+        - slug
+        - color
+
+    UpdateTagRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 50
+          example: "Updated Tag Name"
+        slug:
+          type: string
+          pattern: "^[a-z0-9-]+$"
+          example: "updated-tag-name"
+        color:
+          type: string
+          pattern: "^#[0-9A-Fa-f]{6}$"
+          example: "#FF5733"
+
+    TagResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Tag'
+
+    TagListResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+
+    # ----- Settings -----
+    Settings:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+          maxLength: 100
+          example: "The Engineering Chronicle"
+        blogDescription:
+          type: string
+          maxLength: 500
+          example: "Insights on software engineering, system design, and building great products."
+        authorName:
+          type: string
+          maxLength: 100
+          example: "Alex Chen"
+        authorBio:
+          type: string
+          maxLength: 1000
+          example: "Senior Software Engineer passionate about building scalable systems."
+        authorAvatar:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to author's avatar image
+          example: "https://example.com/avatars/alexchen.jpg"
+        socialLinks:
+          type: object
+          properties:
+            twitter:
+              type: string
+              format: uri
+              nullable: true
+              example: "https://twitter.com/alexchen"
+            github:
+              type: string
+              format: uri
+              nullable: true
+              example: "https://github.com/alexchen"
+            linkedin:
+              type: string
+              format: uri
+              nullable: true
+              example: "https://linkedin.com/in/alexchen"
+      required:
+        - blogTitle
+        - blogDescription
+        - authorName
+
+    UpdateSettingsRequest:
+      type: object
+      properties:
+        blogTitle:
+          type: string
+          maxLength: 100
+          example: "My Tech Blog"
+        blogDescription:
+          type: string
+          maxLength: 500
+          example: "Updated blog description..."
+        authorName:
+          type: string
+          maxLength: 100
+          example: "John Doe"
+        authorBio:
+          type: string
+          maxLength: 1000
+          example: "Updated author bio..."
+        authorAvatar:
+          type: string
+          format: uri
+          nullable: true
+          description: URL to author's avatar image
+        socialLinks:
+          type: object
+          properties:
+            twitter:
+              type: string
+              format: uri
+              nullable: true
+            github:
+              type: string
+              format: uri
+              nullable: true
+            linkedin:
+              type: string
+              format: uri
+              nullable: true
+
+    SettingsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          $ref: '#/components/schemas/Settings'
+
+    # ----- Upload -----
+    UploadResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            url:
+              type: string
+              format: uri
+              description: Public URL of the uploaded image
+              example: "https://storage.example.com/images/abc123.jpg"
+            filename:
+              type: string
+              example: "abc123.jpg"
+            size:
+              type: integer
+              description: File size in bytes
+              example: 102400
+            mimeType:
+              type: string
+              example: "image/jpeg"
