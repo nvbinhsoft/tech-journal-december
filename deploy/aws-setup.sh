@@ -46,9 +46,15 @@ echo "👤 Configuring for user: $TARGET_USER"
 # Install Docker
 if ! command -v docker &> /dev/null; then
     echo "🐳 Installing Docker..."
-    curl -fsSL https://get.docker.com -o get-docker.sh
-    sh get-docker.sh
-    rm get-docker.sh
+    if [ "$PKG_MANAGER" = "dnf" ] || [ "$PKG_MANAGER" = "yum" ]; then
+        # Amazon Linux specific install
+        $PKG_MANAGER install -y docker
+    else
+        # Standard script for Ubuntu/Debian
+        curl -fsSL https://get.docker.com -o get-docker.sh
+        sh get-docker.sh
+        rm get-docker.sh
+    fi
 else
     echo "🐳 Docker already installed."
 fi
