@@ -65,7 +65,12 @@ chmod +x aws-setup.sh
 sudo ./aws-setup.sh
 # Exit and re-login to apply group changes
 exit
-ssh -i key.pem ubuntu@<your-ec2-ip>
+ssh -i key.pem ec2-user@<your-ec2-ip>
+# Verify you are in the docker group
+groups
+# If you don't see 'docker', run:
+sudo usermod -aG docker ec2-user
+newgrp docker
 ```
 
 ### 2. Prepare Application Directory
@@ -73,7 +78,7 @@ Create the folder and necessary files. YOU DO NOT NEED TO CLONE THE REPO.
 
 ```bash
 sudo mkdir -p /opt/tech-journal
-sudo chown ubuntu:ubuntu /opt/tech-journal
+sudo chown -R ec2-user:ec2-user /opt/tech-journal
 cd /opt/tech-journal
 ```
 
@@ -85,9 +90,9 @@ curl -L https://raw.githubusercontent.com/nvbinhsoft/tech-journal-december/main/
 *Note: We use `docker-compose.prod.yml` but will run it as the main composition.*
 
 ### 4. Create Environment File
-Create `.env.production`:
+Create `.env`:
 ```bash
-nano .env.production
+nano .env
 ```
 Paste your production variables:
 ```env
@@ -101,7 +106,6 @@ JWT_SECRET=your-secure-secret-here
 JWT_EXPIRES_IN=86400
 ADMIN_EMAIL=admin@example.com
 ADMIN_PASSWORD=strongpassword
-VITE_API_BASE_URL=http://YOUR_EC2_IP:3000/v1
 ```
 
 > **Important**: You MUST set `GITHUB_REPOSITORY_OWNER` to your GitHub username (lowercase) so docker-compose knows which image to pull.
