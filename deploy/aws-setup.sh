@@ -22,12 +22,14 @@ elif command -v dnf &> /dev/null; then
     PKG_MANAGER="dnf"
     echo "📦 Detected Amazon Linux/RHEL system (dnf)"
     $PKG_MANAGER update -y
-    $PKG_MANAGER install -y curl git unzip lsof
+    $PKG_MANAGER install -y git unzip lsof
+    if ! command -v curl &> /dev/null; then $PKG_MANAGER install -y curl; fi
 elif command -v yum &> /dev/null; then
     PKG_MANAGER="yum"
     echo "📦 Detected Amazon Linux/CentOS system (yum)"
     $PKG_MANAGER update -y
-    $PKG_MANAGER install -y curl git unzip
+    $PKG_MANAGER install -y git unzip
+    if ! command -v curl &> /dev/null; then $PKG_MANAGER install -y curl; fi
 else
     echo "❌ Unsupported package manager. Please install Docker manually."
     exit 1
