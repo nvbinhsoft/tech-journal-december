@@ -127,7 +127,17 @@ docker-compose -f docker-compose.prod.yml ps
 
 ---
 
-## Step 4: Updates & Rollbacks
+## Step 5: Seed Database (First Run Only)
+
+To populate the database with initial data (admin user, tags, etc.):
+
+```bash
+docker-compose -f docker-compose.prod.yml exec backend node dist/database/seed.js
+```
+
+---
+
+## Step 6: Updates & Rollbacks
 
 ### To Update (Continuous Deployment)
 1.  Push changes to `main` on GitHub.
