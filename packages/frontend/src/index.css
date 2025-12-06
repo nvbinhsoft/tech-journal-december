@@ -121,6 +121,7 @@
 
   .prose {
     font-family: var(--font-body);
+    font-variant-numeric: lining-nums;
   }
 }
 
