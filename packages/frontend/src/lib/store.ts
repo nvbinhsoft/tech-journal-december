@@ -85,6 +85,8 @@ export const useBlogStore = create<BlogStore>()(
             // Mock mode: check against default credentials
             if (email === MOCK_CREDENTIALS.email && password === MOCK_CREDENTIALS.password) {
               set({ isAdmin: true, user: mockUser, isLoading: false });
+              // Keep a token so admin state survives refresh in mock mode
+              setAccessToken('mock-token');
               return true;
             }
             set({ error: 'Invalid credentials', isLoading: false });
@@ -419,9 +421,16 @@ export const useBlogStore = create<BlogStore>()(
     {
       name: 'blog-storage',
       partialize: (state) => ({
-        // Only persist these fields
+        // Persist auth for API mode; persist data too in mock mode so refresh keeps local edits
         isAdmin: state.isAdmin,
         user: state.user,
+        ...(isMockMode()
+          ? {
+              articles: state.articles,
+              tags: state.tags,
+              settings: state.settings,
+            }
+          : {}),
       }),
     }
   )

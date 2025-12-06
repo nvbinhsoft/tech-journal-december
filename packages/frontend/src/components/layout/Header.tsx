@@ -7,6 +7,7 @@ export function Header() {
   const { settings, isAdmin, logout } = useBlogStore();
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
+  const blogTitle = settings.blogTitle || 'The Engineering Chronicle';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background/80 backdrop-blur-md">
@@ -16,7 +17,7 @@ export function Header() {
           className="group flex items-center gap-2 transition-opacity hover:opacity-80"
         >
           <span className="font-serif text-xl font-semibold text-foreground">
-            {settings.blogTitle}
+            {blogTitle}
           </span>
         </Link>
 

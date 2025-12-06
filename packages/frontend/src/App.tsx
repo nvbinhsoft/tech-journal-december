@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,32 +14,39 @@ import TagsManager from "./pages/admin/TagsManager";
 import SettingsPage from "./pages/admin/SettingsPage";
 import NotFound from "./pages/NotFound";
 import { SessionExpiredDialog } from "./components/auth/SessionExpiredDialog";
+import { initializeStore } from "./lib/store";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <SessionExpiredDialog />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/article/:slug" element={<Article />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<Dashboard />} />
-          <Route path="/admin/editor" element={<ArticleEditor />} />
-          <Route path="/admin/editor/:id" element={<ArticleEditor />} />
-          <Route path="/admin/tags" element={<TagsManager />} />
-          <Route path="/admin/settings" element={<SettingsPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  useEffect(() => {
+    // Ensure auth/state is rehydrated and base data is fetched on hard refresh
+    void initializeStore();
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <SessionExpiredDialog />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/article/:slug" element={<Article />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<Dashboard />} />
+            <Route path="/admin/editor" element={<ArticleEditor />} />
+            <Route path="/admin/editor/:id" element={<ArticleEditor />} />
+            <Route path="/admin/tags" element={<TagsManager />} />
+            <Route path="/admin/settings" element={<SettingsPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
-
