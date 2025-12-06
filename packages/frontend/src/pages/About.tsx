@@ -55,7 +55,7 @@ export default function About() {
                             </h1>
 
                             <p className="mt-3 text-lg text-muted-foreground">
-                                Software Engineer • Technical Writer • Creator
+                                Creator
                             </p>
 
                             {/* Social Links */}

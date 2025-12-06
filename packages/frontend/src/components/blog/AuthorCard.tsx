@@ -37,7 +37,7 @@ export function AuthorCard() {
                             {settings.authorName || 'Anonymous'}
                         </h3>
                         <p className="text-sm text-muted-foreground">
-                            Author & Developer
+                            Author
                         </p>
                     </div>
                 </div>
