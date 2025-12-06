@@ -1,6 +1,22 @@
 /* TipTap Editor Styles */
 .ProseMirror {
   outline: none;
+  /* Use a sans font that has lining numerals */
+  font-family: var(--font-sans);
+}
+
+/* Force lining numerals for all editor and rendered article content */
+.ProseMirror,
+.ProseMirror * {
+  /* Prefer lining/tabular numerals and explicitly disable oldstyle */
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1 !important;
+}
+
+.article-content,
+.article-content * {
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1 !important;
 }
 
 .ProseMirror p.is-editor-empty:first-child::before {
@@ -13,30 +29,36 @@
 
 /* Headings */
 .ProseMirror h1 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 2rem;
   font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
   color: hsl(var(--foreground));
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1 !important;
 }
 
 .ProseMirror h2 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 1.5rem;
   margin-bottom: 0.75rem;
   color: hsl(var(--foreground));
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1 !important;
 }
 
 .ProseMirror h3 {
-  font-family: var(--font-serif);
+  font-family: var(--font-sans);
   font-size: 1.25rem;
   font-weight: 600;
   margin-top: 1.25rem;
   margin-bottom: 0.5rem;
   color: hsl(var(--foreground));
+  font-variant-numeric: lining-nums tabular-nums !important;
+  font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1 !important;
 }
 
 /* Paragraphs */

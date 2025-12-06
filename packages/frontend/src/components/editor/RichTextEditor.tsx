@@ -5,16 +5,16 @@ import Image from '@tiptap/extension-image';
 import Placeholder from '@tiptap/extension-placeholder';
 import CodeBlockLowlight from '@tiptap/extension-code-block-lowlight';
 import { common, createLowlight } from 'lowlight';
-import { 
-  Bold, 
-  Italic, 
-  Strikethrough, 
-  Code, 
-  List, 
-  ListOrdered, 
-  Quote, 
-  Heading1, 
-  Heading2, 
+import {
+  Bold,
+  Italic,
+  Strikethrough,
+  Code,
+  List,
+  ListOrdered,
+  Quote,
+  Heading1,
+  Heading2,
   Heading3,
   Link as LinkIcon,
   Image as ImageIcon,
@@ -113,7 +113,8 @@ export function RichTextEditor({ content, onChange, placeholder = 'Start writing
     },
     editorProps: {
       attributes: {
-        class: 'prose prose-lg max-w-none focus:outline-none min-h-[400px] font-body text-foreground',
+        class: 'prose prose-lg max-w-none focus:outline-none min-h-[400px] font-body text-foreground lining-nums',
+        style: 'font-variant-numeric: lining-nums tabular-nums; font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1;',
       },
     },
   });
@@ -126,7 +127,7 @@ export function RichTextEditor({ content, onChange, placeholder = 'Start writing
 
   const addLink = useCallback(() => {
     if (!editor) return;
-    
+
     if (linkUrl) {
       editor
         .chain()
@@ -165,14 +166,14 @@ export function RichTextEditor({ content, onChange, placeholder = 'Start writing
 
   if (!editor) return null;
 
-  const ToolbarButton = ({ 
-    onClick, 
-    isActive = false, 
+  const ToolbarButton = ({
+    onClick,
+    isActive = false,
     children,
-    title 
-  }: { 
-    onClick: () => void; 
-    isActive?: boolean; 
+    title
+  }: {
+    onClick: () => void;
+    isActive?: boolean;
     children: React.ReactNode;
     title: string;
   }) => (

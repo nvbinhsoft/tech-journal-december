@@ -48,7 +48,13 @@ export function ArticleCard({ article, index = 0 }: ArticleCardProps) {
         </h2>
       </Link>
 
-      <p className="mt-2 line-clamp-2 font-body text-muted-foreground">
+      <p
+        className="mt-2 line-clamp-2 font-sans text-muted-foreground lining-nums"
+        style={{
+          fontVariantNumeric: 'lining-nums tabular-nums',
+          fontFeatureSettings: '"lnum" 1, "onum" 0, "pnum" 0, "tnum" 1',
+        }}
+      >
         {article.excerpt}
       </p>
 

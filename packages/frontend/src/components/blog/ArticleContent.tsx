@@ -16,7 +16,11 @@ export function ArticleContent({ content }: ArticleContentProps) {
   if (isHTML) {
     return (
       <div
-        className="ProseMirror article-content font-body text-lg leading-relaxed lining-nums"
+        className="ProseMirror article-content font-sans text-lg leading-relaxed lining-nums"
+        style={{
+          fontVariantNumeric: 'lining-nums tabular-nums',
+          fontFeatureSettings: '"lnum" 1, "onum" 0, "pnum" 0, "tnum" 1',
+        }}
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -80,17 +84,17 @@ export function ArticleContent({ content }: ArticleContentProps) {
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="font-serif text-2xl font-semibold mt-6 mb-3 text-foreground">
+      <h2 className="font-sans text-2xl font-semibold mt-6 mb-3 text-foreground">
         {children}
       </h2>
     ),
     h3: ({ children }) => (
-      <h3 className="font-serif text-xl font-semibold mt-5 mb-2 text-foreground">
+      <h3 className="font-sans text-xl font-semibold mt-5 mb-2 text-foreground">
         {children}
       </h3>
     ),
     p: ({ children }) => (
-      <p className="mb-4 leading-relaxed text-foreground lining-nums">
+      <p className="mb-4 leading-relaxed text-foreground lining-nums font-sans">
         {children}
       </p>
     ),
@@ -105,7 +109,7 @@ export function ArticleContent({ content }: ArticleContentProps) {
       </ol>
     ),
     li: ({ children }) => (
-      <li className="text-foreground lining-nums">
+      <li className="text-foreground lining-nums font-sans">
         {children}
       </li>
     ),
@@ -147,7 +151,13 @@ export function ArticleContent({ content }: ArticleContentProps) {
   };
 
   return (
-    <div className="article-content font-body text-lg leading-relaxed lining-nums">
+    <div
+      className="article-content font-sans text-lg leading-relaxed lining-nums"
+      style={{
+        fontVariantNumeric: 'lining-nums tabular-nums',
+        fontFeatureSettings: '"lnum" 1, "onum" 0, "pnum" 0, "tnum" 1',
+      }}
+    >
       <ReactMarkdown components={components}>
         {content}
       </ReactMarkdown>

@@ -113,6 +113,9 @@
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
+    /* Keep digits aligned across the site */
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1;
   }
 
   h1,
@@ -131,6 +134,13 @@
     font-family: var(--font-body);
     font-variant-numeric: lining-nums !important;
     font-feature-settings: "lnum" 1 !important;
+  }
+
+  .font-serif,
+  .font-body,
+  .font-sans {
+    font-variant-numeric: lining-nums tabular-nums;
+    font-feature-settings: "lnum" 1, "onum" 0, "pnum" 0, "tnum" 1;
   }
 }
 
