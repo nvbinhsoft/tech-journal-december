@@ -116,8 +116,7 @@ export default function About() {
                                     </p>
                                 ) : (
                                     <p className="leading-relaxed text-muted-foreground">
-                                        Welcome to my corner of the internet! I'm passionate about building
-                                        beautiful, performant web applications and sharing what I learn along the way.
+                                        Welcome to my corner of the internet!
                                     </p>
                                 )}
 
@@ -127,8 +126,7 @@ export default function About() {
                                 </p>
 
                                 <p className="mt-4 leading-relaxed text-muted-foreground">
-                                    When I'm not coding, you'll find me exploring new technologies, contributing
-                                    to open source, or enjoying a good cup of coffee while reading about the
+                                    When I'm not coding, you'll find me exploring new technologies, enjoying a good cup of coffee while reading about the
                                     latest in software development.
                                 </p>
                             </div>
