@@ -31,8 +31,6 @@ services:
     image: ghcr.io/${GITHUB_REPOSITORY_OWNER}/tech-journal-frontend:latest
     pull_policy: always
     restart: unless-stopped
-    ports:
-      - "80:80"
     depends_on:
       - backend
     healthcheck:
@@ -45,3 +43,24 @@ services:
       options:
         max-size: "10m"
         max-file: "3"
+
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      - DOMAIN_NAME=${DOMAIN_NAME}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - frontend
+
+volumes:
+  caddy_data:
+  caddy_config:
+
+
