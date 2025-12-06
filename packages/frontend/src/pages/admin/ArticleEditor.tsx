@@ -154,7 +154,10 @@ export default function ArticleEditor() {
               placeholder="article-url-slug"
               value={formData.slug}
               onChange={(e) =>
-                setFormData((prev) => ({ ...prev, slug: generateSlug(e.target.value) }))
+                setFormData((prev) => ({
+                  ...prev,
+                  slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
+                }))
               }
             />
           </div>
@@ -210,8 +213,8 @@ export default function ArticleEditor() {
                   type="button"
                   onClick={() => toggleTag(tag.id)}
                   className={`rounded-full px-3 py-1 text-sm font-medium transition-all ${formData.tags.includes(tag.id)
-                      ? 'ring-2 ring-primary ring-offset-2'
-                      : 'opacity-60 hover:opacity-100'
+                    ? 'ring-2 ring-primary ring-offset-2'
+                    : 'opacity-60 hover:opacity-100'
                     }`}
                   style={{
                     backgroundColor: `${tag.color}20`,
