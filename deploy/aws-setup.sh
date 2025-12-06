@@ -45,7 +45,7 @@ echo "👤 Configuring for user: $TARGET_USER"
 
 # Install Docker
 if ! command -v docker &> /dev/null; then
-    echo "🐳 Installing Docker..."
+    echo "🐳 Installing Docker... $PKG_MANAGER"
     if [ "$PKG_MANAGER" = "dnf" ] || [ "$PKG_MANAGER" = "yum" ]; then
         # Amazon Linux specific install
         $PKG_MANAGER install -y docker
@@ -59,7 +59,7 @@ else
     echo "🐳 Docker already installed."
 fi
 
-# Install Docker Compose
+# Install Docker Compose (if not already installed)...
 if ! command -v docker-compose &> /dev/null; then
     echo "🐳 Installing Docker Compose..."
     curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
