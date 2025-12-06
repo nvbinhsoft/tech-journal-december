@@ -50,9 +50,20 @@ We need to provide environment variables to the build process via GitHub Secrets
 
 ---
 
-## Step 2: Setup EC2 Server
+## Step 2: Setup EC2
+### 4. Configure GitHub Secrets (For Auto-Deployment)
+To enable automatic deployment when you push to main, go to **Settings** -> **Secrets and variables** -> **Actions** and add:
 
-SSH into your fresh EC2 instance:
+*   `EC2_HOST`: public IP of your EC2 instance.
+*   `EC2_USER`: `ec2-user` (or `ubuntu`).
+*   `EC2_SSH_KEY`: Content of your `.pem` key file (open with text editor).
+
+### 5. Deployment
+**Option A: Automated (Recommended)**
+Just push code to the `main` branch. GitHub Actions will build logs and deploy them to your EC2 automatically.
+
+**Option B: Manual (Initial Setup)**
+1.  Connect to your EC2 instance:
 ```bash
 ssh -i key.pem ubuntu@<your-ec2-ip>
 ```
