@@ -14,12 +14,10 @@ RUN npm ci
 # Copy source code
 COPY . .
 
-# Build arguments for environment variables
-ARG VITE_API_BASE_URL
+# Build arguments (if needed)
 ARG VITE_MOCK_DATA=false
 
-# Set environment variables for build
-ENV VITE_API_BASE_URL=${VITE_API_BASE_URL}
+# Set environment variables
 ENV VITE_MOCK_DATA=${VITE_MOCK_DATA}
 
 # Build the application

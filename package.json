@@ -8,6 +8,7 @@
         "packages/backend"
     ],
     "scripts": {
+        "dev": "(cd packages/backend && ../../node_modules/.bin/nest start --watch) & (cd packages/frontend && ../../node_modules/.bin/vite)",
         "dev:frontend": "npm run dev -w packages/frontend",
         "dev:backend": "npm run start:dev -w packages/backend",
         "build:frontend": "npm run build -w packages/frontend",
