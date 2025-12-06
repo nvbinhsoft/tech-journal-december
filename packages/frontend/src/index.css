@@ -52,7 +52,7 @@
 
     --gradient-warm: linear-gradient(135deg, hsl(12 76% 61% / 0.1), hsl(40 33% 98%));
     --gradient-hero: linear-gradient(180deg, hsl(40 25% 96%), hsl(40 33% 98%));
-    
+
     --shadow-soft: 0 2px 8px hsl(20 10% 15% / 0.04);
     --shadow-card: 0 4px 24px hsl(20 10% 15% / 0.06);
     --shadow-elevated: 0 8px 32px hsl(20 10% 15% / 0.08);
@@ -98,7 +98,7 @@
 
     --gradient-warm: linear-gradient(135deg, hsl(12 76% 61% / 0.15), hsl(20 15% 10%));
     --gradient-hero: linear-gradient(180deg, hsl(20 12% 14%), hsl(20 15% 10%));
-    
+
     --shadow-soft: 0 2px 8px hsl(0 0% 0% / 0.2);
     --shadow-card: 0 4px 24px hsl(0 0% 0% / 0.3);
     --shadow-elevated: 0 8px 32px hsl(0 0% 0% / 0.4);
@@ -115,13 +115,22 @@
     font-family: var(--font-sans);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: var(--font-serif);
   }
 
-  .prose {
+  .prose,
+  .article-content,
+  .article-content p,
+  .article-content li {
     font-family: var(--font-body);
-    font-variant-numeric: lining-nums;
+    font-variant-numeric: lining-nums !important;
+    font-feature-settings: "lnum" 1 !important;
   }
 }
 
@@ -139,27 +148,34 @@
   }
 
   @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+      opacity: 0;
+    }
+
+    to {
+      opacity: 1;
+    }
   }
 
   @keyframes slideUp {
-    from { 
+    from {
       opacity: 0;
       transform: translateY(20px);
     }
-    to { 
+
+    to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 
   @keyframes scaleIn {
-    from { 
+    from {
       opacity: 0;
       transform: scale(0.95);
     }
-    to { 
+
+    to {
       opacity: 1;
       transform: scale(1);
     }

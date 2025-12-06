@@ -121,14 +121,9 @@ export default function About() {
                                 )}
 
                                 <p className="mt-4 leading-relaxed text-muted-foreground">
-                                    This blog is where I document my journey as a developer, share insights
-                                    from my projects, and explore the ever-evolving world of technology.
+                                    This blog is where I document my journey as a developer, or something else from my life.
                                 </p>
 
-                                <p className="mt-4 leading-relaxed text-muted-foreground">
-                                    When I'm not coding, you'll find me exploring new technologies, enjoying a good cup of coffee while reading about the
-                                    latest in software development.
-                                </p>
                             </div>
 
                             {/* What I Write About */}

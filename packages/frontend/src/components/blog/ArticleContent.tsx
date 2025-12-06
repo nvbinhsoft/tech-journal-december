@@ -16,7 +16,7 @@ export function ArticleContent({ content }: ArticleContentProps) {
   if (isHTML) {
     return (
       <div
-        className="ProseMirror article-content font-body text-lg leading-relaxed"
+        className="ProseMirror article-content font-body text-lg leading-relaxed lining-nums"
         dangerouslySetInnerHTML={{ __html: content }}
       />
     );
@@ -90,7 +90,7 @@ export function ArticleContent({ content }: ArticleContentProps) {
       </h3>
     ),
     p: ({ children }) => (
-      <p className="mb-4 leading-relaxed text-foreground">
+      <p className="mb-4 leading-relaxed text-foreground lining-nums">
         {children}
       </p>
     ),
@@ -105,7 +105,7 @@ export function ArticleContent({ content }: ArticleContentProps) {
       </ol>
     ),
     li: ({ children }) => (
-      <li className="text-foreground">
+      <li className="text-foreground lining-nums">
         {children}
       </li>
     ),
@@ -147,7 +147,7 @@ export function ArticleContent({ content }: ArticleContentProps) {
   };
 
   return (
-    <div className="article-content font-body text-lg leading-relaxed">
+    <div className="article-content font-body text-lg leading-relaxed lining-nums">
       <ReactMarkdown components={components}>
         {content}
       </ReactMarkdown>

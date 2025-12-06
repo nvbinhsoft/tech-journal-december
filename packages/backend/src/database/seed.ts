@@ -748,66 +748,66 @@ async function seed() {
         }
 
         // 2. Create default tags
-        console.log('🏷️  Creating default tags...');
-        const defaultTags = [
-            { name: 'TypeScript', slug: 'typescript', color: '#3178C6' },
-            { name: 'React', slug: 'react', color: '#61DAFB' },
-            { name: 'Node.js', slug: 'nodejs', color: '#339933' },
-            { name: 'MongoDB', slug: 'mongodb', color: '#47A248' },
-            { name: 'NestJS', slug: 'nestjs', color: '#E0234E' },
-            { name: 'GraphQL', slug: 'graphql', color: '#E535AB' },
-            { name: 'Docker', slug: 'docker', color: '#2496ED' },
-            { name: 'AWS', slug: 'aws', color: '#FF9900' },
-        ];
-
-        const tagMap: Record<string, string> = {};
-        for (const tagData of defaultTags) {
-            try {
-                const tag = await tagsService.create(tagData);
-                tagMap[tagData.slug] = tag.id;
-                console.log(`   ✅ Created tag: ${tagData.name}`);
-            } catch {
-                // Tag exists, find it
-                const existingTags = await tagsService.findAll();
-                const existing = existingTags.find((t) => t.slug === tagData.slug);
-                if (existing && existing.id) {
-                    tagMap[tagData.slug] = existing.id;
-                }
-                console.log(`   ⏭️  Tag already exists: ${tagData.name}`);
-            }
-        }
+        // console.log('🏷️  Creating default tags...');
+        // const defaultTags = [
+        //     { name: 'TypeScript', slug: 'typescript', color: '#3178C6' },
+        //     { name: 'React', slug: 'react', color: '#61DAFB' },
+        //     { name: 'Node.js', slug: 'nodejs', color: '#339933' },
+        //     { name: 'MongoDB', slug: 'mongodb', color: '#47A248' },
+        //     { name: 'NestJS', slug: 'nestjs', color: '#E0234E' },
+        //     { name: 'GraphQL', slug: 'graphql', color: '#E535AB' },
+        //     { name: 'Docker', slug: 'docker', color: '#2496ED' },
+        //     { name: 'AWS', slug: 'aws', color: '#FF9900' },
+        // ];
+// 
+        // const tagMap: Record<string, string> = {};
+        // for (const tagData of defaultTags) {
+        //     try {
+        //         const tag = await tagsService.create(tagData);
+        //         tagMap[tagData.slug] = tag.id;
+        //         console.log(`   ✅ Created tag: ${tagData.name}`);
+        //     } catch {
+        //         // Tag exists, find it
+        //         const existingTags = await tagsService.findAll();
+        //         const existing = existingTags.find((t) => t.slug === tagData.slug);
+        //         if (existing && existing.id) {
+        //             tagMap[tagData.slug] = existing.id;
+        //         }
+        //         console.log(`   ⏭️  Tag already exists: ${tagData.name}`);
+        //     }
+        // }
 
         // 3. Initialize default settings
-        console.log('⚙️  Initializing default settings...');
-        await settingsService.get();
-        console.log('   ✅ Default settings initialized');
+        // console.log('⚙️  Initializing default settings...');
+        // await settingsService.get();
+        // console.log('   ✅ Default settings initialized');
 
         // 4. Create sample articles
-        console.log('📝 Creating sample articles...');
-        for (const articleData of sampleArticles) {
-            try {
-                // Map tag slugs to tag IDs
-                const tagIds = articleData.tags
-                    .map((slug) => tagMap[slug])
-                    .filter((id): id is string => id !== undefined);
+        // console.log('📝 Creating sample articles...');
+        // for (const articleData of sampleArticles) {
+        //     try {
+        //         // Map tag slugs to tag IDs
+        //         const tagIds = articleData.tags
+        //             .map((slug) => tagMap[slug])
+        //             .filter((id): id is string => id !== undefined);
 
-                await articlesService.create({
-                    title: articleData.title,
-                    slug: articleData.slug,
-                    excerpt: articleData.excerpt,
-                    content: articleData.content,
-                    tags: tagIds,
-                    published: articleData.published,
-                });
-                console.log(`   ✅ Created article: ${articleData.title}`);
-            } catch (error: any) {
-                if (error.message?.includes('duplicate') || error.code === 11000) {
-                    console.log(`   ⏭️  Article already exists: ${articleData.title}`);
-                } else {
-                    console.log(`   ❌ Failed to create: ${articleData.title} - ${error.message}`);
-                }
-            }
-        }
+        //         await articlesService.create({
+        //             title: articleData.title,
+        //             slug: articleData.slug,
+        //             excerpt: articleData.excerpt,
+        //             content: articleData.content,
+        //             tags: tagIds,
+        //             published: articleData.published,
+        //         });
+        //         console.log(`   ✅ Created article: ${articleData.title}`);
+        //     } catch (error: any) {
+        //         if (error.message?.includes('duplicate') || error.code === 11000) {
+        //             console.log(`   ⏭️  Article already exists: ${articleData.title}`);
+        //         } else {
+        //             console.log(`   ❌ Failed to create: ${articleData.title} - ${error.message}`);
+        //         }
+        //     }
+        // }
 
         console.log('\n🎉 Seed completed successfully!');
     } catch (error) {
