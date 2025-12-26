@@ -14,6 +14,16 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
     JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN, '86400'}
 
+package:
+  patterns:
+    - '!src/**'
+    - '!test/**'
+    - '!.*'
+    - '!.env*'
+    - '!README.md'
+    - '!tsconfig*.json'
+    - '!nest-cli.json'
+    - 'dist/**'
 functions:
   api:
     handler: dist/lambda.handler

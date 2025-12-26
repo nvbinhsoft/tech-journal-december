@@ -56,7 +56,7 @@ aws iam create-access-key --user-name tech-journal-cicd
 
 ```bash
 # Replace YOUR_USERNAME with your GitHub username (lowercase)
-aws s3 mb s3://tech-journal-frontend-YOUR_USERNAME --region ap-southeast-1
+aws s3 mb s3://tech-journal-frontend-nvbinhsoft --region ap-southeast-1
 ```
 
 ### Step 3: Request ACM Certificate (for custom domain)
@@ -65,23 +65,25 @@ aws s3 mb s3://tech-journal-frontend-YOUR_USERNAME --region ap-southeast-1
 
 ```bash
 aws acm request-certificate \
-  --domain-name your-domain.com \
-  --subject-alternative-names "techjournal.your-domain.com" \
+  --domain-name nvbinhsoft.cloud \
   --validation-method DNS \
   --region us-east-1
 
 # Add the DNS CNAME record shown, then wait for validation
 ```
 
-### Step 4: Deploy Backend (First Time)
+### Step 4: Deploy Backend (Manual / Local Only)
+
+> **Important**: This step is for the **manual/local deployment** (Case 1). Since `serverless.yml` reads from your local shell environment using `${env:VAR}`, you MUST manually export these variables before deploying.
 
 ```bash
 cd packages/backend
 npm install
 npm run build:lambda
 
-# Set environment variables
-export MONGODB_URI="mongodb+srv://..."
+# CASE 1: MANUAL LOCAL DEPLOYMENT
+# We must manually export these because we are not using the automated CI/CD yet.
+export MONGODB_URI="mongodb+srv://nvbinhsoft_db_user:1n1wWucoot38fhtv@cluster0.ufphuxp.mongodb.net/tech-journal?appName=Cluster0"
 export JWT_SECRET="your-secret"
 export JWT_EXPIRES_IN="86400"
 
@@ -95,29 +97,55 @@ npx serverless deploy --stage prod
 
 1. **Go to CloudFront** → Create Distribution
 
-2. **Origin 1 (S3)**:
-   - Domain: `tech-journal-frontend-YOUR_USERNAME.s3.ap-southeast-1.amazonaws.com`
-   - Origin access: Origin Access Control (OAC) → Create new
+2. **Step A: Configure the First Origin (S3)**
+   In the "Create Distribution" wizard:
+   - **Origin domain**: Click the field and select your S3 bucket (`tech-journal-frontend-nvbinhsoft.s3...`) from the dropdown.
+     > *Tip: You must select it from the dropdown for the "Origin access" options to appear.*
+   - **Origin access**: Select **"Origin access control settings (recommended)"**.
+     - Click **"Create control setting"** (keep defaults) and click Create.
+   - **Origin path**: Leave empty.
 
-3. **Origin 2 (API Gateway)**:
-   - Domain: `xxxxxx.execute-api.ap-southeast-1.amazonaws.com`
-   - Origin path: `/prod`
+   **Default Cache Behavior**:
+   - **Viewer protocol policy**: Redirect HTTP to HTTPS
+   - **Allowed HTTP methods**: GET, HEAD
+   - **Restrict viewer access**: No
 
-4. **Behaviors**:
-   | Path | Origin | Methods |
-   |------|--------|---------|
-   | Default (`*`) | S3 | GET, HEAD |
-   | `/v1/*` | API Gateway | ALL methods |
+3. **Step B: Create Distribution**
+   - **Web Application Firewall (WAF)**: Enable security protections (or leave default).
+   - Click **Create Distribution**.
+   > *Note: If you don't see options for Domain or SSL yet, don't worry! We will add them in **Step E**.*
 
-5. **Settings**:
-   - Alternate domain: `techjournal.your-domain.com`
-   - SSL certificate: Select your ACM certificate
-   - Default root object: `index.html`
+4. **Step C: Add Backend Origin (After Creation)**
+   Wait for the distribution to be created, then click on its ID to edit it.
+   - Go to the **Origins** tab → **Create origin**.
+   - **Origin domain**: Paste your API Gateway domain (`xxxxxx.execute-api.ap-southeast-1.amazonaws.com`).
+     - *Note: Do not include `https://` or the path.*
+   - **Origin path**: `/prod` (Important! This points to your deployed stage).
+   - **Protocol**: HTTPS only.
+   - Click **Create Origin**.
 
-6. **Error Pages**: Add custom error response:
-   - HTTP 403 → `/index.html` (200 OK) - for SPA routing
+5. **Step D: Connect Backend Behavior**
+   - Go to the **Behaviors** tab → **Create behavior**.
+   - **Path pattern**: `/v1/*`
+   - **Origin**: Select your API Gateway origin.
+   - **Viewer protocol policy**: HTTPS only.
+   - **Allowed HTTP methods**: GET, HEAD, OPTIONS, PUT, POST, PATCH, DELETE.
+   - **Cache key and origin requests**:
+     - Select **"Cache policy and origin request policy (recommended)"**.
+     - Cache policy: `CachingDisabled` (since it's an API).
+     - Origin request policy: `AllViewer` (passes auth headers to Lambda).
+   - Click **Create behavior**.
 
-7. **Copy the Distribution ID** for GitHub Secrets
+6. **Step E: Configure Domain & SSL (General Settings)**
+   - Go to the **General** tab of your distribution → **Edit**.
+   - **Alternate domain name (CNAME)**: Add `techjournal.nvbinhsoft.cloud`.
+   - **Custom SSL certificate**: Select your ACM certificate.
+   - **Default root object**: `index.html` (Crucial for React apps!).
+   - Click **Save changes**.
+
+7. **Final Configuration**:
+   - Copy the **Distribution ID** for GitHub Secrets.
+   - Wait for the distribution status to change from "Deploying" to "Enabled" (can take 5-10 mins).
 
 ### Step 6: Update S3 Bucket Policy
 
@@ -132,10 +160,10 @@ cat > /tmp/bucket-policy.json << 'EOF'
     "Effect": "Allow",
     "Principal": {"Service": "cloudfront.amazonaws.com"},
     "Action": "s3:GetObject",
-    "Resource": "arn:aws:s3:::tech-journal-frontend-YOUR_USERNAME/*",
+    "Resource": "arn:aws:s3:::tech-journal-frontend-nvbinhsoft/*",
     "Condition": {
       "StringEquals": {
-        "AWS:SourceArn": "arn:aws:cloudfront::YOUR_AWS_ACCOUNT_ID:distribution/YOUR_DISTRIBUTION_ID"
+        "AWS:SourceArn": "arn:aws:cloudfront::135808924033:distribution/E2YLZB2694OVZ3"
       }
     }
   }]
@@ -143,7 +171,7 @@ cat > /tmp/bucket-policy.json << 'EOF'
 EOF
 
 aws s3api put-bucket-policy \
-  --bucket tech-journal-frontend-YOUR_USERNAME \
+  --bucket tech-journal-frontend-nvbinhsoft \
   --policy file:///tmp/bucket-policy.json
 ```
 
@@ -170,12 +198,18 @@ Add CNAME record pointing your domain to CloudFront:
 
 ## Deployment
 
-After initial setup, deployment is automatic:
+There are two main ways to deploy this application:
 
-1. Push code to `main` branch
-2. GitHub Actions builds and deploys:
-   - Backend → Lambda (via Serverless Framework)
-   - Frontend → S3 + CloudFront cache invalidation
+### Case 1: Manual / Local Deployment
+Follow **Step 4** above. You must manually `export` environment variables in your terminal because the `serverless.yml` config pulls them from the current shell environment (`${env:VAR}`).
+
+### Case 2: Automated CI/CD (Recommended)
+Once you have configured **GitHub Secrets** (Step 7), deployment is fully automated. You do **not** need to manually export anything.
+
+1. Push code to `main` branch.
+2. The GitHub Action (`.github/workflows/deploy-serverless.yml`) will:
+   - Inject the variables from **GitHub Secrets** into the build environment.
+   - Run `serverless deploy`, automatically picking up the values.
 
 ---
 
