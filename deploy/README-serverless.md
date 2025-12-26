@@ -83,7 +83,7 @@ npm run build:lambda
 
 # CASE 1: MANUAL LOCAL DEPLOYMENT
 # We must manually export these because we are not using the automated CI/CD yet.
-export MONGODB_URI="mongodb+srv://nvbinhsoft_db_user:1n1wWucoot38fhtv@cluster0.ufphuxp.mongodb.net/tech-journal?appName=Cluster0"
+export MONGODB_URI="mongodb+srv://url"
 export JWT_SECRET="your-secret"
 export JWT_EXPIRES_IN="86400"
 
@@ -163,7 +163,7 @@ cat > /tmp/bucket-policy.json << 'EOF'
     "Resource": "arn:aws:s3:::tech-journal-frontend-nvbinhsoft/*",
     "Condition": {
       "StringEquals": {
-        "AWS:SourceArn": "arn:aws:cloudfront::135808924033:distribution/E2YLZB2694OVZ3"
+        "AWS:SourceArn": "arn:aws:cloudfront::135803324033:distribution/E2YLZB26944VZ3"
       }
     }
   }]
