@@ -41,7 +41,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
       
       - name: Install Serverless Framework (v3)
-        run: npm install -g serverless@3
+        run: npm install -g serverless@3.38.0
       
       - name: Deploy to AWS Lambda
         run: serverless deploy --stage prod
