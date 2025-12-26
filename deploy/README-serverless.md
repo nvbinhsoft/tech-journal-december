@@ -47,6 +47,8 @@ aws iam attach-user-policy --user-name tech-journal-cicd \
   --policy-arn arn:aws:iam::aws:policy/IAMFullAccess
 aws iam attach-user-policy --user-name tech-journal-cicd \
   --policy-arn arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+aws iam attach-user-policy --user-name tech-journal-cicd \
+  --policy-arn arn:aws:iam::aws:policy/AWSCloudFormationFullAccess
 
 # Create access keys (SAVE THESE!)
 aws iam create-access-key --user-name tech-journal-cicd
