@@ -34,8 +34,10 @@ plugins:
 custom:
   esbuild:
     bundle: true
-    minify: true
+    minify: false
     sourcemap: true
+    platform: node
+    format: cjs
     external:
       - '@nestjs/websockets/socket-module'
       - '@nestjs/microservices/microservices-module'

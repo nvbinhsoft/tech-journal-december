@@ -1,3 +1,4 @@
+console.log('🔥 LAMBDA_FILE_LOADED: Initializing script engine...');
 import 'reflect-metadata';
 import serverlessExpress from '@vendia/serverless-express';
 import { NestFactory } from '@nestjs/core';
