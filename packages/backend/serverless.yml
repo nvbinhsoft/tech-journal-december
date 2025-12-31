@@ -43,7 +43,6 @@ custom:
     packager: npm
     external:
       # Optional NestJS modules loaded at runtime
-      - 'class-transformer/storage'
       - '@grpc/grpc-js'
       - '@grpc/proto-loader'
       - 'ioredis'
