@@ -36,7 +36,11 @@ custom:
     bundle: true
     minify: true
     sourcemap: true
-    exclude: []
+    external:
+      - '@nestjs/websockets/socket-module'
+      - '@nestjs/microservices/microservices-module'
+      - '@nestjs/microservices'
+      - 'class-transformer/storage'
     target: node20
     define: { 'process.env.NODE_ENV': '"production"' }
     packager: npm
