@@ -38,11 +38,6 @@ custom:
     sourcemap: true
     platform: node
     format: cjs
-    external:
-      - '@nestjs/websockets/socket-module'
-      - '@nestjs/microservices/microservices-module'
-      - '@nestjs/microservices'
-      - 'class-transformer/storage'
     target: node20
     define: { 'process.env.NODE_ENV': '"production"' }
     packager: npm
