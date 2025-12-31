@@ -14,19 +14,9 @@ provider:
     JWT_SECRET: ${env:JWT_SECRET}
     JWT_EXPIRES_IN: ${env:JWT_EXPIRES_IN, '86400'}
 
-package:
-  patterns:
-    - '!src/**'
-    - '!test/**'
-    - '!.*'
-    - '!.env*'
-    - '!README.md'
-    - '!tsconfig*.json'
-    - '!nest-cli.json'
-    - 'dist/**'
 functions:
   api:
-    handler: dist/lambda.handler
+    handler: src/lambda.handler
     events:
       - http:
           path: /{proxy+}
@@ -38,9 +28,18 @@ functions:
           cors: true
 
 plugins:
+  - serverless-esbuild
   - serverless-offline
 
 custom:
+  esbuild:
+    bundle: true
+    minify: true
+    sourcemap: true
+    exclude: []
+    target: node20
+    define: { 'process.env.NODE_ENV': '"production"' }
+    packager: npm
   serverless-offline:
     httpPort: 3000
     noPrependStageInUrl: true

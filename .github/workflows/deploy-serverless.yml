@@ -29,9 +29,7 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
-      
-      - name: Build for Lambda
-        run: npm run build:lambda
+        working-directory: ./
       
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
@@ -70,6 +68,7 @@ jobs:
       
       - name: Install dependencies
         run: npm ci
+        working-directory: ./
       
       - name: Build for production
         run: npm run build

@@ -140,7 +140,7 @@ npx serverless deploy --stage prod
 
 6. **Step E: Configure Domain & SSL (General Settings)**
    - Go to the **General** tab of your distribution → **Edit**.
-   - **Alternate domain name (CNAME)**: Add `techjournal.nvbinhsoft.cloud`.
+   - **Alternate domain name (CNAME)**: Add `nvbinhsoft.cloud`.
    - **Custom SSL certificate**: Select your ACM certificate.
    - **Default root object**: `index.html` (Crucial for React apps!).
    - Click **Save changes**.

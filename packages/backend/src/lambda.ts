@@ -1,6 +1,4 @@
-// Lambda handler for AWS Lambda deployment
-// Uses @vendia/serverless-express to wrap the NestJS Express app
-
+import 'reflect-metadata';
 import serverlessExpress from '@vendia/serverless-express';
 import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
