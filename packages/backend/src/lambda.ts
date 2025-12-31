@@ -8,7 +8,6 @@ import { ConfigService } from '@nestjs/config';
 import express from 'express';
 import { AppModule } from './app.module.js';
 
-/*
 // Cache the server instance for warm Lambda invocations
 let cachedServer: ReturnType<typeof serverlessExpress> | null = null;
 
@@ -83,14 +82,4 @@ export const handler = async (
             }),
         };
     }
-};
-*/
-
-export const handler = async (event: any, context: any) => {
-    console.log('🔍 DEBUG: Minimal Handler Invoked');
-    console.log('Event:', JSON.stringify(event));
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ message: 'Hello from Minimal Lambda!', event }),
-    };
 };
