@@ -41,6 +41,22 @@ custom:
     target: node20
     define: { 'process.env.NODE_ENV': '"production"' }
     packager: npm
+    external:
+      # Optional NestJS modules loaded at runtime
+      - 'class-transformer/storage'
+      - '@grpc/grpc-js'
+      - '@grpc/proto-loader'
+      - 'ioredis'
+      - 'kafkajs'
+      - 'mqtt'
+      - 'nats'
+      - 'amqplib'
+      - 'amqp-connection-manager'
+      # WebSocket dependencies
+      - '@nestjs/websockets/socket-module'
+      - '@nestjs/platform-socket.io'
+      - 'socket.io'
+      - 'socket.io-client'
   serverless-offline:
     httpPort: 3000
     noPrependStageInUrl: true
