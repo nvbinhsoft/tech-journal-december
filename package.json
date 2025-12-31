@@ -27,5 +27,8 @@
         "monorepo"
     ],
     "author": "",
-    "license": "MIT"
+    "license": "MIT",
+    "dependencies": {
+        "class-transformer": "^0.3.1"
+    }
 }
