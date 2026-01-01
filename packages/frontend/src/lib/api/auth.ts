@@ -14,8 +14,8 @@ export const authApi = {
         );
 
         // Store the access token
-        if (response.data.accessToken) {
-            setAccessToken(response.data.accessToken);
+        if (response.data.token) {
+            setAccessToken(response.data.token);
         }
 
         return response.data;

@@ -44,8 +44,7 @@ export interface LoginRequest {
 }
 
 export interface LoginResponseData {
-    accessToken: string;
-    expiresIn: number;
+    token: string;
     user: User;
 }
 
