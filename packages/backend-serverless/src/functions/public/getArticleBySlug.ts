@@ -2,6 +2,7 @@ import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda
 import { connectToDatabase } from '../../lib/database.js';
 import { success, notFound, serverError } from '../../lib/response.js';
 import { Article } from '../../models/Article.js';
+import '../../models/Tag.js'; // Register Tag schema for populate
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
     try {

@@ -1,7 +1,8 @@
 import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import { connectToDatabase } from '../../lib/database.js';
-import { success, successWithPagination, serverError } from '../../lib/response.js';
+import { successWithPagination, serverError } from '../../lib/response.js';
 import { Article } from '../../models/Article.js';
+import '../../models/Tag.js'; // Import to register Tag schema for populate
 
 interface QueryParams {
     page?: string;

@@ -3,6 +3,7 @@ import { connectToDatabase } from '../../../lib/database.js';
 import { verifyToken } from '../../../lib/auth.js';
 import { success, notFound, unauthorized, serverError } from '../../../lib/response.js';
 import { Article } from '../../../models/Article.js';
+import '../../../models/Tag.js'; // Register Tag schema for populate
 
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
     try {

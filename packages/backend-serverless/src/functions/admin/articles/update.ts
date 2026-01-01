@@ -3,6 +3,7 @@ import { connectToDatabase } from '../../../lib/database.js';
 import { verifyToken } from '../../../lib/auth.js';
 import { success, error, notFound, unauthorized, parseBody, serverError } from '../../../lib/response.js';
 import { Article } from '../../../models/Article.js';
+import '../../../models/Tag.js'; // Register Tag schema for populate
 
 interface UpdateArticleRequest {
     title?: string;
