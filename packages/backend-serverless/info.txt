@@ -1,0 +1,42 @@
+service: tech-journal-api
+stage: prod
+region: ap-southeast-1
+stack: tech-journal-api-prod
+endpoints:
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/public/articles
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/public/articles/{slug}
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/public/tags
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/public/settings
+  POST - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/auth/login
+  POST - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/auth/logout
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/auth/me
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/articles
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/articles/{id}
+  POST - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/articles
+  PUT - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/articles/{id}
+  DELETE - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/articles/{id}
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/tags
+  POST - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/tags
+  PUT - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/tags/{id}
+  DELETE - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/tags/{id}
+  GET - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/settings
+  PUT - https://gascgzpcx2.execute-api.ap-southeast-1.amazonaws.com/admin/settings
+functions:
+  publicGetArticles: tech-journal-api-prod-publicGetArticles
+  publicGetArticleBySlug: tech-journal-api-prod-publicGetArticleBySlug
+  publicGetTags: tech-journal-api-prod-publicGetTags
+  publicGetSettings: tech-journal-api-prod-publicGetSettings
+  authLogin: tech-journal-api-prod-authLogin
+  authLogout: tech-journal-api-prod-authLogout
+  authMe: tech-journal-api-prod-authMe
+  adminListArticles: tech-journal-api-prod-adminListArticles
+  adminGetArticle: tech-journal-api-prod-adminGetArticle
+  adminCreateArticle: tech-journal-api-prod-adminCreateArticle
+  adminUpdateArticle: tech-journal-api-prod-adminUpdateArticle
+  adminDeleteArticle: tech-journal-api-prod-adminDeleteArticle
+  adminListTags: tech-journal-api-prod-adminListTags
+  adminCreateTag: tech-journal-api-prod-adminCreateTag
+  adminUpdateTag: tech-journal-api-prod-adminUpdateTag
+  adminDeleteTag: tech-journal-api-prod-adminDeleteTag
+  adminGetSettings: tech-journal-api-prod-adminGetSettings
+  adminUpdateSettings: tech-journal-api-prod-adminUpdateSettings

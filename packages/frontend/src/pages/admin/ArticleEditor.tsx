@@ -164,6 +164,7 @@ export default function ArticleEditor() {
                   slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '')
                 }))
               }
+              className="font-serif text-lg"
             />
           </div>
 
@@ -204,6 +205,7 @@ export default function ArticleEditor() {
               placeholder="Brief description of the article..."
               value={formData.excerpt}
               onChange={(e) => setFormData((prev) => ({ ...prev, excerpt: e.target.value }))}
+              className="font-serif text-lg"
               rows={2}
             />
           </div>

@@ -100,10 +100,41 @@ export function RichTextEditor({ content, onChange, placeholder = 'Start writing
       Placeholder.configure({
         placeholder,
       }),
-      CodeBlockLowlight.configure({
+      CodeBlockLowlight.extend({
+        addKeyboardShortcuts() {
+          return {
+            ...this.parent?.(),
+            Tab: () => {
+              if (this.editor.isActive('codeBlock')) {
+                return this.editor.commands.insertContent('  ');
+              }
+              return false;
+            },
+            Enter: ({ editor }) => {
+              if (!editor.isActive('codeBlock')) {
+                return false;
+              }
+              const { state } = editor;
+              const { selection } = state;
+              const { $from } = selection;
+              const textBefore = $from.parent.textContent.slice(0, $from.parentOffset);
+
+              if (textBefore.trim().endsWith('{')) {
+                editor
+                  .chain()
+                  .insertContent('\n  \n}')
+                  .setTextSelection(selection.from + 3) // Move cursor to the middle line
+                  .run();
+                return true;
+              }
+              return false;
+            },
+          };
+        },
+      }).configure({
         lowlight,
         HTMLAttributes: {
-          class: 'rounded-lg bg-[#1e1e1e] p-4 my-4 overflow-x-auto text-sm',
+          class: 'rounded-lg bg-[#282c34] border border-[#3e4451] p-4 my-4 overflow-x-auto text-sm',
         },
       }),
     ],
