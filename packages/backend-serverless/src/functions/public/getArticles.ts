@@ -8,6 +8,7 @@ interface QueryParams {
     page?: string;
     limit?: string;
     tag?: string;
+    tags?: string;
     search?: string;
 }
 
@@ -24,8 +25,8 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         const query: Record<string, unknown> = { published: true };
 
         // Filter by tag
-        if (params.tag) {
-            query.tags = params.tag;
+        if (params.tag || params.tags) {
+            query.tags = params.tag || params.tags;
         }
 
         // Text search
@@ -39,7 +40,6 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit)
-                .populate('tags', 'name slug color')
                 .lean(),
             Article.countDocuments(query),
         ]);
@@ -49,11 +49,6 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             ...article,
             id: article._id.toString(),
             _id: undefined,
-            tags: article.tags?.map((tag: Record<string, unknown>) => ({
-                ...tag,
-                id: (tag._id as { toString(): string }).toString(),
-                _id: undefined,
-            })),
         }));
 
         const totalPages = Math.ceil(total / limit);

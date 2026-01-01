@@ -54,21 +54,10 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
         await article.save();
 
-        // Populate tags for response
-        await article.populate('tags', 'name slug color');
-
         const articleObj = article.toJSON();
         return success({
             ...articleObj,
             id: article._id.toString(),
-            tags: (article.tags as unknown[])?.map((tag: unknown) => {
-                const t = tag as Record<string, unknown>;
-                return {
-                    ...t,
-                    id: (t._id as { toString(): string })?.toString(),
-                    _id: undefined,
-                };
-            }),
         }, 201);
     } catch (err) {
         return serverError(err);

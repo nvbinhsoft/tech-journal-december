@@ -21,7 +21,6 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         }
 
         const article = await Article.findById(id)
-            .populate('tags', 'name slug color')
             .lean();
 
         if (!article) {
@@ -33,11 +32,6 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
             ...article,
             id: article._id.toString(),
             _id: undefined,
-            tags: article.tags?.map((tag: Record<string, unknown>) => ({
-                ...tag,
-                id: (tag._id as { toString(): string }).toString(),
-                _id: undefined,
-            })),
         };
 
         return success(transformedArticle);
