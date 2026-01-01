@@ -12,10 +12,10 @@ async function seed() {
     // Create admin user
     const existingAdmin = await User.findOne({ email: 'admin@techjournal.com' });
     if (!existingAdmin) {
-        const passwordHash = await bcrypt.hash('admin123', 10);
+        const hashedPassword = await bcrypt.hash('admin123', 10);
         await User.create({
             email: 'admin@techjournal.com',
-            passwordHash,
+            password: hashedPassword,
             name: 'Admin',
             role: 'admin',
         });

@@ -3,7 +3,7 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 export interface IUser extends Document {
     _id: Types.ObjectId;
     email: string;
-    passwordHash: string;
+    password: string;
     name: string;
     role: 'admin' | 'editor';
     createdAt: Date;
@@ -19,7 +19,7 @@ const UserSchema = new Schema<IUser>(
             lowercase: true,
             trim: true,
         },
-        passwordHash: {
+        password: {
             type: String,
             required: true,
         },
@@ -47,7 +47,7 @@ UserSchema.set('toJSON', {
     transform: (_doc, ret) => {
         ret.id = ret._id.toString();
         delete ret._id;
-        delete ret.passwordHash;
+        delete ret.password;
         return ret;
     },
 });

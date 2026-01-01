@@ -26,7 +26,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
         }
 
         // Verify password
-        const isValidPassword = await bcrypt.compare(body.password, user.passwordHash);
+        const isValidPassword = await bcrypt.compare(body.password, user.password);
         if (!isValidPassword) {
             return error('Invalid email or password', 401);
         }
