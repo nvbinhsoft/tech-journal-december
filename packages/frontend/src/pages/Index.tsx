@@ -29,7 +29,7 @@ const Index = () => {
 
       // Tag filter
       const matchesTags = selectedTags.length === 0 ||
-        selectedTags.some((tagId) => article.tags.includes(tagId));
+        selectedTags.every((tagId) => article.tags.includes(tagId));
 
       return matchesSearch && matchesTags;
     });
