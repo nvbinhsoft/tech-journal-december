@@ -40,13 +40,18 @@ export default function ArticleEditor() {
 
   useEffect(() => {
     if (existingArticle) {
+      // Ensure tags are mapped to IDs if they are objects
+      const tagIds = existingArticle.tags.map((t: any) =>
+        typeof t === 'object' && t !== null && 'id' in t ? t.id : t
+      );
+
       setFormData({
         title: existingArticle.title,
         slug: existingArticle.slug,
         excerpt: existingArticle.excerpt,
         content: existingArticle.content,
         coverImage: existingArticle.coverImage || '',
-        tags: existingArticle.tags,
+        tags: tagIds,
         published: existingArticle.published,
       });
     }
