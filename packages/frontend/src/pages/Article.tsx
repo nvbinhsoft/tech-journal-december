@@ -9,9 +9,9 @@ import { Button } from '@/components/ui/button';
 export default function Article() {
   const { slug } = useParams<{ slug: string }>();
   const { articles, tags, settings } = useBlogStore();
-  
+
   const article = articles.find((a) => a.slug === slug && a.published);
-  
+
   if (!article) {
     return <Navigate to="/" replace />;
   }
@@ -85,9 +85,17 @@ export default function Article() {
           {/* Author Bio */}
           <footer className="mt-16 border-t border-border pt-8">
             <div className="flex items-start gap-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
-                <User className="h-7 w-7 text-primary" />
-              </div>
+              {settings.authorAvatar ? (
+                <img
+                  src={settings.authorAvatar}
+                  alt={settings.authorName}
+                  className="h-14 w-14 rounded-full object-cover"
+                />
+              ) : (
+                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-primary/10">
+                  <User className="h-7 w-7 text-primary" />
+                </div>
+              )}
               <div>
                 <p className="font-serif font-semibold text-foreground">
                   {settings.authorName}

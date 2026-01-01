@@ -118,18 +118,18 @@
 
 /* Code block */
 .ProseMirror pre {
-  background-color: #282c34;
+  background-color: #f6f8fa;
   padding: 1rem;
   border-radius: 0.5rem;
   margin: 1.5rem 0;
   overflow-x: auto;
-  border: 1px solid #30363d;
+  border: 1px solid #d0d7de;
 }
 
 .ProseMirror pre code {
   background: none;
   padding: 0;
-  color: #c9d1d9;
+  color: #24292f;
   font-size: 0.875rem;
   font-family: 'SF Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
   tab-size: 2;
@@ -178,10 +178,10 @@
   text-decoration: line-through;
 }
 
-/* Code block syntax highlighting */
+/* Code block syntax highlighting - GitHub Light */
 .ProseMirror .hljs-comment,
 .ProseMirror .hljs-quote {
-  color: #6a9955;
+  color: #6e7781;
 }
 
 .ProseMirror .hljs-variable,
@@ -193,7 +193,7 @@
 .ProseMirror .hljs-link,
 .ProseMirror .hljs-selector-id,
 .ProseMirror .hljs-selector-class {
-  color: #f14c4c;
+  color: #0550ae;
 }
 
 .ProseMirror .hljs-number,
@@ -203,23 +203,27 @@
 .ProseMirror .hljs-literal,
 .ProseMirror .hljs-type,
 .ProseMirror .hljs-params {
-  color: #b5cea8;
+  color: #0550ae;
+  /* Use blue for numbers/types/builtins */
 }
 
 .ProseMirror .hljs-string,
 .ProseMirror .hljs-symbol,
 .ProseMirror .hljs-bullet {
-  color: #ce9178;
+  color: #0a3069;
+  /* Dark blue for strings */
 }
 
 .ProseMirror .hljs-title,
 .ProseMirror .hljs-section {
-  color: #dcdcaa;
+  color: #8250df;
+  /* Purple for functions */
 }
 
 .ProseMirror .hljs-keyword,
 .ProseMirror .hljs-selector-tag {
-  color: #569cd6;
+  color: #cf222e;
+  /* Red for keywords */
 }
 
 .ProseMirror .hljs-emphasis {

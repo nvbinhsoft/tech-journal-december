@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { coldarkDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { ghcolors } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css'; // Import GitHub light theme for HTML content
 import type { Components } from 'react-markdown';
 import '../editor/editor-styles.css';
 
@@ -51,20 +52,20 @@ export function ArticleContent({ content }: ArticleContentProps) {
         return (
           <div className="my-6 rounded-lg overflow-hidden border border-slate-700/50">
             {/* Language label - simple and clean like GitHub */}
-            <div className="flex items-center px-4 py-2 bg-[#21252b] border-b border-slate-700/50">
-              <span className="text-xs font-medium text-slate-400">
+            <div className="flex items-center px-4 py-2 bg-[#f6f8fa] border-b border-[#d0d7de]">
+              <span className="text-xs font-medium text-slate-500">
                 {language}
               </span>
             </div>
             {/* Code content */}
             <SyntaxHighlighter
-              style={coldarkDark}
+              style={ghcolors}
               language={language}
               PreTag="div"
               customStyle={{
                 margin: 0,
                 padding: '1rem 1.25rem',
-                background: '#282c34',
+                background: '#ffffff',
                 fontSize: '0.875rem',
                 lineHeight: '1.6',
                 borderRadius: 0,

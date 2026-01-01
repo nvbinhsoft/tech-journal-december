@@ -134,7 +134,7 @@ export function RichTextEditor({ content, onChange, placeholder = 'Start writing
       }).configure({
         lowlight,
         HTMLAttributes: {
-          class: 'rounded-lg bg-[#282c34] border border-[#3e4451] p-4 my-4 overflow-x-auto text-sm',
+          class: 'rounded-lg bg-[#f6f8fa] border border-[#d0d7de] p-4 my-4 overflow-x-auto text-sm',
         },
       }),
     ],
