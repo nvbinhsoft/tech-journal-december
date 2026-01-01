@@ -1,0 +1,33 @@
+{
+    "name": "tech-journal-serverless",
+    "version": "1.0.0",
+    "description": "Pure Lambda serverless backend for Tech Journal",
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "build": "tsc",
+        "offline": "serverless offline --stage dev",
+        "deploy": "serverless deploy --stage prod",
+        "deploy:dev": "serverless deploy --stage dev",
+        "remove": "serverless remove --stage prod",
+        "logs": "serverless logs -f",
+        "seed": "tsx src/scripts/seed.ts"
+    },
+    "dependencies": {
+        "bcryptjs": "^3.0.3",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.20.1"
+    },
+    "devDependencies": {
+        "@types/aws-lambda": "^8.10.145",
+        "@types/bcryptjs": "^2.4.6",
+        "@types/jsonwebtoken": "^9.0.7",
+        "@types/node": "^22.10.7",
+        "esbuild": "^0.27.2",
+        "serverless": "^3.34.0",
+        "serverless-esbuild": "^1.57.0",
+        "serverless-offline": "^13.0.0",
+        "tsx": "^4.19.2",
+        "typescript": "^5.7.3"
+    }
+}
