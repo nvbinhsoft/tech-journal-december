@@ -15,7 +15,7 @@ import SettingsPage from "./pages/admin/SettingsPage";
 import AuditLog from "./pages/admin/AuditLog";
 import NotFound from "./pages/NotFound";
 import { SessionExpiredDialog } from "./components/auth/SessionExpiredDialog";
-import { initializeStore } from "./lib/store";
+import { initializeStore, useBlogStore } from "./lib/store";
 import { auditApi } from "./lib/api";
 
 const queryClient = new QueryClient();
@@ -28,28 +28,35 @@ const App = () => {
     // Record visit
     // We only record the visit on initial app load (SPA), or we could do it on route change if desired.
     // For now, simpler is creating one record per session/refresh.
-    const recordVisit = async () => {
-      try {
-        await auditApi.recordVisit({
-          endpoint: window.location.pathname,
-          userAgent: navigator.userAgent,
-          referrer: document.referrer,
-          screenResolution: `${window.screen.width}x${window.screen.height}`
-        });
-      } catch (error) {
+    const recordVisit = () => {
+      // Fire and forget - don't await
+      auditApi.recordVisit({
+        endpoint: window.location.pathname,
+        userAgent: navigator.userAgent,
+        referrer: document.referrer,
+        screenResolution: `${window.screen.width}x${window.screen.height}`
+      }).catch(error => {
         // Silently fail for audit logs
         console.error('Failed to record visit', error);
-      }
+      });
     };
 
     // Check if we are not in mock mode (store initializes mock mode check too)
     // But auditApi internally checks or the backend will fail if mock.
     // Ideally we check env here or inside api.
     if (import.meta.env.VITE_MOCK_DATA !== 'true') {
-      void recordVisit();
+      recordVisit();
     }
 
   }, []);
+
+  // Show nothing (or a loader) until the store is initialized
+  // This prevents protected routes from redirecting/failing before we know the auth state
+  const isInitialized = useBlogStore(state => state.isInitialized);
+  if (!isInitialized) {
+    return <div className="flex h-screen items-center justify-center">Loading...</div>;
+  }
+
 
   return (
     <QueryClientProvider client={queryClient}>

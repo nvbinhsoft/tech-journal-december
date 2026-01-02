@@ -23,6 +23,7 @@ interface BlogStore {
   sessionExpired: boolean;
 
   // Loading states
+  isInitialized: boolean;
   isLoading: boolean;
   error: string | null;
 
@@ -76,6 +77,7 @@ export const useBlogStore = create<BlogStore>()(
       isAdmin: false,
       user: null,
       sessionExpired: false,
+      isInitialized: false,
       isLoading: false,
       error: null,
 
@@ -483,6 +485,8 @@ export async function initializeStore() {
       store.fetchSettings(),
     ]);
   }
+
+  useBlogStore.setState({ isInitialized: true });
 }
 
 // Set up session expired callback

@@ -18,8 +18,9 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
         const body = event.body ? JSON.parse(event.body) as CreateAuditBody : {};
 
-        // Extract IP
-        const ip = event.requestContext?.http?.sourceIp || 'unknown';
+        // Extract IP: Prioritize X-Forwarded-For (standard for proxies/CloudFront)
+        const forwardedFor = event.headers['x-forwarded-for'];
+        const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : (event.requestContext?.http?.sourceIp || 'unknown');
 
         // Extract User Agent
         const userAgent = body.userAgent || event.headers['user-agent'] || 'unknown';
