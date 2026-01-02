@@ -1,7 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { authApi, articlesApi, tagsApi, settingsApi, clearAccessToken, getAccessToken, setAccessToken, setSessionExpiredCallback } from './api';
-import type { Article, Tag, Settings, User } from './api/types';
+import { authApi, articlesApi, tagsApi, settingsApi, auditApi, clearAccessToken, getAccessToken, setAccessToken, setSessionExpiredCallback } from './api';
+import type { Article, Tag, Settings, User, Pagination } from './api/types';
+import type { AuditLog } from './api/audit';
 import { mockArticles, mockTags, mockSettings, mockUser, MOCK_CREDENTIALS } from './mock/data';
 
 // Check if we're in mock mode
@@ -49,6 +50,11 @@ interface BlogStore {
 
   // Settings actions
   updateSettings: (settings: Partial<Settings>) => Promise<void>;
+
+  // Audit actions
+  auditLogs: AuditLog[];
+  auditPagination: Pagination | null;
+  fetchAuditLogs: (page?: number, limit?: number) => Promise<void>;
 
   // Utility
   clearError: () => void;
@@ -413,6 +419,32 @@ export const useBlogStore = create<BlogStore>()(
       },
 
       // ============================================
+      // Audit Actions
+      // ============================================
+
+      auditLogs: [],
+      auditPagination: null,
+
+      fetchAuditLogs: async (page = 1, limit = 20) => {
+        if (isMockMode()) {
+          return;
+        }
+
+        set({ isLoading: true, error: null });
+        try {
+          const response = await auditApi.getAuditLogs({ page, limit });
+          set({
+            auditLogs: response.data,
+            auditPagination: response.pagination,
+            isLoading: false
+          });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : 'Failed to fetch audit logs';
+          set({ error: message, isLoading: false });
+        }
+      },
+
+      // ============================================
       // Utility
       // ============================================
 
@@ -426,10 +458,10 @@ export const useBlogStore = create<BlogStore>()(
         user: state.user,
         ...(isMockMode()
           ? {
-              articles: state.articles,
-              tags: state.tags,
-              settings: state.settings,
-            }
+            articles: state.articles,
+            tags: state.tags,
+            settings: state.settings,
+          }
           : {}),
       }),
     }

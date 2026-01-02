@@ -158,6 +158,21 @@ functions:
           path: /admin/settings
           method: PUT
 
+  # ============ AUDIT ============
+  auditCreate:
+    handler: src/functions/audit/create.handler
+    events:
+      - httpApi:
+          path: /audit
+          method: POST
+
+  adminListAudit:
+    handler: src/functions/admin/audit/list.handler
+    events:
+      - httpApi:
+          path: /admin/audit
+          method: GET
+
 plugins:
   - serverless-esbuild
   - serverless-offline

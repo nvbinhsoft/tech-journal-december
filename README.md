@@ -3,7 +3,7 @@
 A unified repository for Tech Journal's frontend (React) and backend (NestJS) applications.
 
 ## Structure
-
+Noted: backend package is deprecated, we moved to use backend-serverless instead to follow serverless architecture
 ```
 tech-journal-monorepo/
 ├── packages/

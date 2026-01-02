@@ -21,6 +21,17 @@ export function success<T>(data: T, statusCode = 200): APIGatewayProxyResultV2 {
     };
 }
 
+export function created<T>(data: T): APIGatewayProxyResultV2 {
+    return {
+        statusCode: 201,
+        headers: corsHeaders,
+        body: JSON.stringify({
+            success: true,
+            data,
+        }),
+    };
+}
+
 /**
  * Success response with pagination
  */

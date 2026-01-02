@@ -66,3 +66,8 @@ export function requireAuth(event: APIGatewayProxyEventV2): JwtPayload {
     }
     return user;
 }
+
+/**
+ * Alias for verifyToken to be more semantic in handlers
+ */
+export const getUserFromEvent = verifyToken;

@@ -4,7 +4,7 @@ import { useBlogStore } from '@/lib/store';
 import { Layout } from '@/components/layout/Layout';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { Plus, Edit, Trash2, Eye, EyeOff, FileText, Tags, Settings } from 'lucide-react';
+import { Plus, Edit, Trash2, Eye, EyeOff, FileText, Tags, Settings, Activity } from 'lucide-react';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -103,6 +103,20 @@ export default function Dashboard() {
               <div>
                 <p className="font-medium text-foreground">Manage Tags</p>
                 <p className="text-sm text-muted-foreground">Add or edit tags</p>
+              </div>
+            </div>
+          </Link>
+          <Link
+            to="/admin/audit"
+            className="rounded-lg border border-border bg-card p-6 shadow-soft transition-shadow hover:shadow-card"
+          >
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-muted">
+                <Activity className="h-5 w-5 text-muted-foreground" />
+              </div>
+              <div>
+                <p className="font-medium text-foreground">Audit Logs</p>
+                <p className="text-sm text-muted-foreground">View visitor history</p>
               </div>
             </div>
           </Link>
