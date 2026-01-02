@@ -18,7 +18,7 @@ export const tagsApi = {
      * Get all tags (public)
      */
     async getPublicTags(): Promise<Tag[]> {
-        const response = await api.get<ApiListResponse<Tag>>('/public/tags');
+        const response = await api.get<ApiListResponse<Tag>>('/api/public/tags');
         return response.data;
     },
 
@@ -30,7 +30,7 @@ export const tagsApi = {
      * Get all tags with article count (admin)
      */
     async getAdminTags(): Promise<Tag[]> {
-        const response = await api.get<ApiListResponse<Tag>>('/admin/tags', true);
+        const response = await api.get<ApiListResponse<Tag>>('/api/admin/tags', true);
         return response.data;
     },
 
@@ -38,7 +38,7 @@ export const tagsApi = {
      * Create a new tag
      */
     async createTag(data: CreateTagRequest): Promise<Tag> {
-        const response = await api.post<ApiResponse<Tag>>('/admin/tags', data, true);
+        const response = await api.post<ApiResponse<Tag>>('/api/admin/tags', data, true);
         return response.data;
     },
 
@@ -46,7 +46,7 @@ export const tagsApi = {
      * Update an existing tag
      */
     async updateTag(id: string, data: UpdateTagRequest): Promise<Tag> {
-        const response = await api.put<ApiResponse<Tag>>(`/admin/tags/${id}`, data, true);
+        const response = await api.put<ApiResponse<Tag>>(`/api/admin/tags/${id}`, data, true);
         return response.data;
     },
 
@@ -54,6 +54,6 @@ export const tagsApi = {
      * Delete a tag
      */
     async deleteTag(id: string): Promise<void> {
-        await api.delete<ApiResponse<{ message: string }>>(`/admin/tags/${id}`, true);
+        await api.delete<ApiResponse<{ message: string }>>(`/api/admin/tags/${id}`, true);
     },
 };

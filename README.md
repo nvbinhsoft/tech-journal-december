@@ -9,6 +9,7 @@ This project is a monorepo managed with npm workspaces:
 - **Frontend** (`packages/frontend`): A Single Page Application (SPA) built with React, Vite, TailwindCSS, and shadcn/ui.
 - **Backend** (`packages/backend-serverless`): A generic Serverless API built with Node.js, AWS Lambda, API Gateway, and MongoDB (Mongoose).
 
+Note: backend package actually is a NestJs - based application which is deprecated. Now we are using AWS Lambda with Serverless Framework at backend-serverless package.
 ## ✨ Features
 
 - **Store-backed State Management**: Uses Zustand for robust global state management.

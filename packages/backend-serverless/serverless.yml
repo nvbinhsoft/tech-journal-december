@@ -32,28 +32,28 @@ functions:
     handler: src/functions/public/getArticles.handler
     events:
       - httpApi:
-          path: /public/articles
+          path: /api/public/articles
           method: GET
 
   publicGetArticleBySlug:
     handler: src/functions/public/getArticleBySlug.handler
     events:
       - httpApi:
-          path: /public/articles/{slug}
+          path: /api/public/articles/{slug}
           method: GET
 
   publicGetTags:
     handler: src/functions/public/getTags.handler
     events:
       - httpApi:
-          path: /public/tags
+          path: /api/public/tags
           method: GET
 
   publicGetSettings:
     handler: src/functions/public/getSettings.handler
     events:
       - httpApi:
-          path: /public/settings
+          path: /api/public/settings
           method: GET
 
   # ============ AUTH ENDPOINTS ============
@@ -61,21 +61,21 @@ functions:
     handler: src/functions/auth/login.handler
     events:
       - httpApi:
-          path: /auth/login
+          path: /api/auth/login
           method: POST
 
   authLogout:
     handler: src/functions/auth/logout.handler
     events:
       - httpApi:
-          path: /auth/logout
+          path: /api/auth/logout
           method: POST
 
   authMe:
     handler: src/functions/auth/me.handler
     events:
       - httpApi:
-          path: /auth/me
+          path: /api/auth/me
           method: GET
 
   # ============ ADMIN ARTICLES ============
@@ -83,35 +83,35 @@ functions:
     handler: src/functions/admin/articles/list.handler
     events:
       - httpApi:
-          path: /admin/articles
+          path: /api/admin/articles
           method: GET
 
   adminGetArticle:
     handler: src/functions/admin/articles/get.handler
     events:
       - httpApi:
-          path: /admin/articles/{id}
+          path: /api/admin/articles/{id}
           method: GET
 
   adminCreateArticle:
     handler: src/functions/admin/articles/create.handler
     events:
       - httpApi:
-          path: /admin/articles
+          path: /api/admin/articles
           method: POST
 
   adminUpdateArticle:
     handler: src/functions/admin/articles/update.handler
     events:
       - httpApi:
-          path: /admin/articles/{id}
+          path: /api/admin/articles/{id}
           method: PUT
 
   adminDeleteArticle:
     handler: src/functions/admin/articles/delete.handler
     events:
       - httpApi:
-          path: /admin/articles/{id}
+          path: /api/admin/articles/{id}
           method: DELETE
 
   # ============ ADMIN TAGS ============
@@ -119,28 +119,28 @@ functions:
     handler: src/functions/admin/tags/list.handler
     events:
       - httpApi:
-          path: /admin/tags
+          path: /api/admin/tags
           method: GET
 
   adminCreateTag:
     handler: src/functions/admin/tags/create.handler
     events:
       - httpApi:
-          path: /admin/tags
+          path: /api/admin/tags
           method: POST
 
   adminUpdateTag:
     handler: src/functions/admin/tags/update.handler
     events:
       - httpApi:
-          path: /admin/tags/{id}
+          path: /api/admin/tags/{id}
           method: PUT
 
   adminDeleteTag:
     handler: src/functions/admin/tags/delete.handler
     events:
       - httpApi:
-          path: /admin/tags/{id}
+          path: /api/admin/tags/{id}
           method: DELETE
 
   # ============ ADMIN SETTINGS ============
@@ -148,14 +148,14 @@ functions:
     handler: src/functions/admin/settings/get.handler
     events:
       - httpApi:
-          path: /admin/settings
+          path: /api/admin/settings
           method: GET
 
   adminUpdateSettings:
     handler: src/functions/admin/settings/update.handler
     events:
       - httpApi:
-          path: /admin/settings
+          path: /api/admin/settings
           method: PUT
 
   # ============ AUDIT ============
@@ -163,14 +163,14 @@ functions:
     handler: src/functions/audit/create.handler
     events:
       - httpApi:
-          path: /audit
+          path: /api/audit
           method: POST
 
   adminListAudit:
     handler: src/functions/admin/audit/list.handler
     events:
       - httpApi:
-          path: /admin/audit
+          path: /api/admin/audit
           method: GET
 
 plugins:

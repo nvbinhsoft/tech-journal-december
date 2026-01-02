@@ -24,7 +24,7 @@ export interface GetAuditLogsResponse {
 
 export const auditApi = {
     recordVisit: async (data: { endpoint?: string, userAgent?: string, referrer?: string, screenResolution?: string }) => {
-        return api.post<{ success: boolean; id: string }>('/audit', data);
+        return api.post<{ success: boolean; id: string }>('/api/audit', data);
     },
 
     getAuditLogs: async (params: { page?: number; limit?: number } = {}) => {
@@ -32,6 +32,6 @@ export const auditApi = {
         if (params.page) query.append('page', params.page.toString());
         if (params.limit) query.append('limit', params.limit.toString());
 
-        return api.get<GetAuditLogsResponse>(`/admin/audit?${query.toString()}`, true);
+        return api.get<GetAuditLogsResponse>(`/api/admin/audit?${query.toString()}`, true);
     },
 };

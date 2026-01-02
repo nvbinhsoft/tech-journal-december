@@ -9,7 +9,7 @@ export const authApi = {
      */
     async login(credentials: LoginRequest): Promise<LoginResponseData> {
         const response = await api.post<ApiResponse<LoginResponseData>>(
-            '/auth/login',
+            '/api/auth/login',
             credentials
         );
 
@@ -26,7 +26,7 @@ export const authApi = {
      */
     async logout(): Promise<void> {
         try {
-            await api.post<ApiResponse<{ message: string }>>('/auth/logout', undefined, true);
+            await api.post<ApiResponse<{ message: string }>>('/api/auth/logout', undefined, true);
         } finally {
             // Always clear token, even if API call fails
             clearAccessToken();
@@ -37,7 +37,7 @@ export const authApi = {
      * Get current authenticated user
      */
     async getCurrentUser(): Promise<User> {
-        const response = await api.get<ApiResponse<User>>('/auth/me', true);
+        const response = await api.get<ApiResponse<User>>('/api/auth/me', true);
         return response.data;
     },
 };

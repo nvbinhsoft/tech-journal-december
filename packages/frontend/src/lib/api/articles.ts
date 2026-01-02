@@ -35,14 +35,14 @@ export const articlesApi = {
      */
     async getPublicArticles(params: ArticleListParams = {}): Promise<ApiListResponse<ArticleWithTags>> {
         const query = buildQueryString(params);
-        return api.get<ApiListResponse<ArticleWithTags>>(`/public/articles${query}`);
+        return api.get<ApiListResponse<ArticleWithTags>>(`/api/public/articles${query}`);
     },
 
     /**
      * Get a single published article by slug (public)
      */
     async getPublicArticleBySlug(slug: string): Promise<ArticleWithTags> {
-        const response = await api.get<ApiResponse<ArticleWithTags>>(`/public/articles/${slug}`);
+        const response = await api.get<ApiResponse<ArticleWithTags>>(`/api/public/articles/${slug}`);
         return response.data;
     },
 
@@ -55,14 +55,14 @@ export const articlesApi = {
      */
     async getAdminArticles(params: ArticleListParams = {}): Promise<ApiListResponse<ArticleWithTags>> {
         const query = buildQueryString(params);
-        return api.get<ApiListResponse<ArticleWithTags>>(`/admin/articles${query}`, true);
+        return api.get<ApiListResponse<ArticleWithTags>>(`/api/admin/articles${query}`, true);
     },
 
     /**
      * Get a single article by ID (admin)
      */
     async getAdminArticleById(id: string): Promise<ArticleWithTags> {
-        const response = await api.get<ApiResponse<ArticleWithTags>>(`/admin/articles/${id}`, true);
+        const response = await api.get<ApiResponse<ArticleWithTags>>(`/api/admin/articles/${id}`, true);
         return response.data;
     },
 
@@ -70,7 +70,7 @@ export const articlesApi = {
      * Create a new article
      */
     async createArticle(data: CreateArticleRequest): Promise<ArticleWithTags> {
-        const response = await api.post<ApiResponse<ArticleWithTags>>('/admin/articles', data, true);
+        const response = await api.post<ApiResponse<ArticleWithTags>>('/api/admin/articles', data, true);
         return response.data;
     },
 
@@ -78,7 +78,7 @@ export const articlesApi = {
      * Update an existing article
      */
     async updateArticle(id: string, data: UpdateArticleRequest): Promise<ArticleWithTags> {
-        const response = await api.put<ApiResponse<ArticleWithTags>>(`/admin/articles/${id}`, data, true);
+        const response = await api.put<ApiResponse<ArticleWithTags>>(`/api/admin/articles/${id}`, data, true);
         return response.data;
     },
 
@@ -86,6 +86,6 @@ export const articlesApi = {
      * Delete an article
      */
     async deleteArticle(id: string): Promise<void> {
-        await api.delete<ApiResponse<{ message: string }>>(`/admin/articles/${id}`, true);
+        await api.delete<ApiResponse<{ message: string }>>(`/api/admin/articles/${id}`, true);
     },
 };

@@ -12,7 +12,7 @@ export const settingsApi = {
      * Get blog settings (public)
      */
     async getPublicSettings(): Promise<Settings> {
-        const response = await api.get<ApiResponse<Settings>>('/public/settings');
+        const response = await api.get<ApiResponse<Settings>>('/api/public/settings');
         return response.data;
     },
 
@@ -24,7 +24,7 @@ export const settingsApi = {
      * Get blog settings (admin)
      */
     async getAdminSettings(): Promise<Settings> {
-        const response = await api.get<ApiResponse<Settings>>('/admin/settings', true);
+        const response = await api.get<ApiResponse<Settings>>('/api/admin/settings', true);
         return response.data;
     },
 
@@ -32,7 +32,7 @@ export const settingsApi = {
      * Update blog settings
      */
     async updateSettings(data: UpdateSettingsRequest): Promise<Settings> {
-        const response = await api.put<ApiResponse<Settings>>('/admin/settings', data, true);
+        const response = await api.put<ApiResponse<Settings>>('/api/admin/settings', data, true);
         return response.data;
     },
 };

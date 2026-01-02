@@ -18,19 +18,38 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
 
         const body = event.body ? JSON.parse(event.body) as CreateAuditBody : {};
 
-        // Extract IP: Prioritize X-Forwarded-For (standard for proxies/CloudFront)
+        // Extract IP: Prioritize CloudFront/Load Balancer headers
+        // 1. CloudFront-Viewer-Address (Best for CloudFront)
+        // 2. X-Forwarded-For (Standard proxy)
+        // 3. X-Real-IP (Nginx/Alternative)
+        // 4. Source IP (Direct)
+        const cfViewerAddress = event.headers['cloudfront-viewer-address']; // Format: IP:Port
         const forwardedFor = event.headers['x-forwarded-for'];
-        const ip = forwardedFor ? forwardedFor.split(',')[0].trim() : (event.requestContext?.http?.sourceIp || 'unknown');
+        const realIp = event.headers['x-real-ip'];
+
+        let ip = 'unknown';
+        if (cfViewerAddress) {
+            ip = cfViewerAddress.split(':')[0];
+        } else if (forwardedFor) {
+            ip = forwardedFor.split(',')[0].trim();
+        } else if (realIp) {
+            ip = realIp;
+        } else {
+            ip = event.requestContext?.http?.sourceIp || 'unknown';
+        }
 
         // Extract User Agent
         const userAgent = body.userAgent || event.headers['user-agent'] || 'unknown';
+
+        // Extract Referrer (Body takes precedence, then Header)
+        const referrer = body.referrer || event.headers['referer'] || event.headers['referrer'];
 
         const audit = new Audit({
             ip,
             userAgent,
             endpoint: body.endpoint || 'unknown',
             method: event.requestContext?.http?.method || 'UNKNOWN',
-            referrer: body.referrer,
+            referrer,
             screenResolution: body.screenResolution,
             metadata: body.metadata || {},
         });
