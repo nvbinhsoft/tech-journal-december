@@ -66,10 +66,10 @@ const AuditLog = () => {
                                         </TableCell>
                                         <TableCell>{log.ip}</TableCell>
                                         <TableCell>{log.screenResolution || '-'}</TableCell>
-                                        <TableCell className="max-w-[150px] truncate" title={log.referrer}>
+                                        <TableCell className="break-all">
                                             {log.referrer || '-'}
                                         </TableCell>
-                                        <TableCell className="max-w-[300px] truncate" title={log.userAgent}>
+                                        <TableCell className="break-all">
                                             {log.userAgent}
                                         </TableCell>
                                     </TableRow>
