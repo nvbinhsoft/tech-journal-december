@@ -1,99 +1,93 @@
 # Tech Journal Monorepo
 
-A unified repository for Tech Journal's frontend (React) and backend (NestJS) applications.
+A modern technical blog platform built with a serverless architecture, featuring a React frontend and an AWS Lambda backend.
 
-## Structure
-Noted: backend package is deprecated, we moved to use backend-serverless instead to follow serverless architecture
-```
-tech-journal-monorepo/
-├── packages/
-│   ├── frontend/          # React + Vite frontend
-│   └── backend/           # NestJS API
-├── deploy/                # AWS deployment scripts
-├── docker-compose.prod.yml
-└── package.json           # Workspace root
-```
+## 🏗 Architecture
 
-## Quick Start
+This project is a monorepo managed with npm workspaces:
 
-### Install Dependencies
+- **Frontend** (`packages/frontend`): A Single Page Application (SPA) built with React, Vite, TailwindCSS, and shadcn/ui.
+- **Backend** (`packages/backend-serverless`): A generic Serverless API built with Node.js, AWS Lambda, API Gateway, and MongoDB (Mongoose).
+
+## ✨ Features
+
+- **Store-backed State Management**: Uses Zustand for robust global state management.
+- **Serverless API**: Cost-effective and scalable backend using AWS Lambda.
+- **Admin Dashboard**: Secure admin area for managing content.
+- **Markdown Editor**: Rich text editing experience for articles.
+- **Audit Logging**: Tracks visitor history (IP, Referrer, User Agent) with admin visualization.
+- **Tag Management**: Organize content with a flexible tagging system.
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v18+)
+- MongoDB Atlas (or local MongoDB)
+- AWS Credentials (for deployment)
+
+### 1. Install Dependencies
 
 ```bash
 npm install
 ```
 
-This will install dependencies for both frontend and backend using npm workspaces.
+### 2. Environment Setup
 
-### Development
+Create `.env` files in both packages:
 
-```bash
-# Run frontend dev server (http://localhost:8080)
-npm run dev:frontend
-
-# Run backend dev server (http://localhost:3000)
-npm run dev:backend
+**packages/backend-serverless/.env**:
+```env
+MONGODB_URI=mongodb+srv://...
+JWT_SECRET=your_secret_key
 ```
 
-### Build
+**packages/frontend/.env**:
+```env
+VITE_API_BASE_URL=http://localhost:3000
+VITE_MOCK_DATA=false
+```
+
+### 3. Run Locally
+
+You can run both services concurrently:
+
+**Backend (Offline Mode):**
+```bash
+cd packages/backend-serverless
+npm run offline
+```
+*Runs on http://localhost:3000*
+
+**Frontend:**
+```bash
+cd packages/frontend
+npm run dev
+```
+*Runs on http://localhost:5173*
+
+## 📦 Deployment
+
+### Backend
+
+Deploy to AWS using Serverless Framework:
 
 ```bash
-# Build both projects
+cd packages/backend-serverless
+npm run deploy
+```
+
+### Frontend
+
+Build and deploy to your hosting provider (e.g., Vercel, Netlify, or AWS S3/CloudFront):
+
+```bash
+cd packages/frontend
 npm run build
-
-# Build individually
-npm run build:frontend
-npm run build:backend
 ```
 
-### Docker Production Build
+## 🛠 Tech Stack
 
-```bash
-# Build Docker images
-npm run docker:build
-
-# Start containers
-npm run docker:up
-
-# View logs
-npm run docker:logs
-
-# Stop containers
-npm run docker:down
-```
-
-## Working with Individual Packages
-
-```bash
-# Install package in frontend
-npm install <package-name> -w packages/frontend
-
-# Install package in backend
-npm install <package-name> -w packages/backend
-
-# Run scripts in specific workspace
-npm run <script> -w packages/frontend
-npm run <script> -w packages/backend
-```
-
-## Deployment
-
-See [deploy/README.md](deploy/README.md) for AWS deployment instructions.
-
-## Environment Variables
-
-Each package has its own environment configuration:
-
-- **Frontend**: `packages/frontend/.env.example`
-- **Backend**: `packages/backend/.env.example`
-- **Production**: `packages/backend/.env.production.example`
-
-## Tech Stack
-
-| Package | Technologies |
-|---------|-------------|
-| Frontend | React, Vite, TailwindCSS, Zustand |
-| Backend | NestJS, MongoDB, Passport JWT |
-
-## License
-
-MIT
+- **Frontend**: React, TypeScript, Vite, TailwindCSS, Lucide Icons, Shadcn UI.
+- **Backend**: Node.js, Serverless Framework, AWS Lambda, MongoDB, Mongoose.
+- **Tools**: ESLint, Prettier, TypeScript.
