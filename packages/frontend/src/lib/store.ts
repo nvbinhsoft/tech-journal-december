@@ -470,22 +470,14 @@ export const useBlogStore = create<BlogStore>()(
   )
 );
 
-// Initialize: check auth and fetch data on app start
+// Initialize: check auth on app start - pages handle their own data fetching
 export async function initializeStore() {
   const store = useBlogStore.getState();
 
   // Check if user is authenticated
   await store.checkAuth();
 
-  // Fetch initial data (only in API mode; mock mode already has data)
-  if (!isMockMode()) {
-    await Promise.all([
-      store.fetchArticles(),
-      store.fetchTags(),
-      store.fetchSettings(),
-    ]);
-  }
-
+  // Mark as initialized immediately - pages will fetch their own data
   useBlogStore.setState({ isInitialized: true });
 }
 

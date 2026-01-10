@@ -4,6 +4,7 @@ import { Layout } from '@/components/layout/Layout';
 import { ArticleCard } from '@/components/blog/ArticleCard';
 import { SearchAndFilter } from '@/components/blog/SearchAndFilter';
 import { AuthorCard } from '@/components/blog/AuthorCard';
+import { Skeleton } from '@/components/ui/skeleton';
 
 const Index = () => {
   const { articles, settings, fetchArticles, fetchTags, fetchSettings, isLoading } = useBlogStore();
@@ -92,7 +93,23 @@ const Index = () => {
                   : 'Latest Articles'}
               </h2>
 
-              {filteredArticles.length > 0 ? (
+              {isLoading && articles.length === 0 ? (
+                /* Skeleton loading state */
+                <div className="grid gap-8">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="rounded-lg border border-border bg-card p-6">
+                      <div className="flex gap-4">
+                        <Skeleton className="h-24 w-32 rounded-lg" />
+                        <div className="flex-1 space-y-3">
+                          <Skeleton className="h-6 w-3/4" />
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-2/3" />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : filteredArticles.length > 0 ? (
                 <div className="grid gap-8">
                   {filteredArticles.map((article, index) => (
                     <ArticleCard key={article.id} article={article} index={index} />

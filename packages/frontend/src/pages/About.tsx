@@ -6,7 +6,7 @@ import { Github, Twitter, Linkedin, Mail, MapPin, Calendar, ArrowLeft, Code2, Bo
 import { Button } from '@/components/ui/button';
 
 export default function About() {
-    const { settings, fetchSettings } = useBlogStore();
+    const { settings, fetchSettings, isLoading } = useBlogStore();
 
     useEffect(() => {
         fetchSettings();
